@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial scale=1">
+        <link rel="stylesheet" href="static/styles.css">
+        <title>{% block title %}Home{% endblock %}</title>
+    </head>
+    <body>
+        <div class="navbar-container">
+            <ul id="navbar">
+                <li class="navbar-element"><a class="navbar-link" href="/base">Home</a></li>
+                <li class="navbar-element"><a class="navbar-link" href="/watchlist">My Watchlist</a></li>
+                <li class="navbar-element"><a class="navbar-link" href="/login">Login</a></li>
+                <li class="navbar-element"><a class="navbar-link" href="/signup">Signup</a></li>
+                <li class="navbar-element"><a class="navbar-link" href="/logout">Signup</a></li>
+            </ul>
+        </div>
+        <div>
+            <!-- store the current inputted stock ticker in the session if valid -->
+            <form method="POST">
+                <input class="searchbar" type="search" placeholder="Enter a valid stock ticker like AAPL">
+            </form>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+body {
+    background-color: #f8f8f8;
+}
+
+#navbar {
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+
+.navbar-element {
+    float: left;
+}
+
+
+.navbar-link {
+    color: #333333;
+    padding: 1rem 2rem;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+    font-family: Arial;
+}
+.navbar-link:hover {
+    color: lightblue;
+}
+
+
+
+.searchbar {
+    padding: 1.2rem 3rem;
+    width: 60vw;
+    text-align: center;
+    font-size: 1.5em;
+    border-radius: 17px;
+    border: 1px solid #333333;
+    display: flex;
+    margin: 0 auto;
+}
+.searchbar:focus {
+    outline: none;
+}
