@@ -16,9 +16,11 @@ def verify_stock_ticker_exists(ticker: str) -> bool:
         if response:
             session["current_stock_ticker"] = response[0]["symbol"]
             session["current_stock_name"] = response[0]["name"]
+            session["current_stock_verified"] = True
             print(session["current_stock_ticker"])
             return True
         else:
+            session["current_stock_verified"] = False
             return False
     except Exception as e:
         print(f"Error: {e}")
