@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from backend.models.Stock import Stock
 
 views = Blueprint("views", __name__)
@@ -20,7 +20,7 @@ def home_page():
         except Exception as e:
             flash(e.args[0])
             return render_template("base.html")
-    
+
 
 @views.route("/stock-analysis")
 def analysis_page():
