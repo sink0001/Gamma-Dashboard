@@ -1,17 +1,9 @@
 
-function get_session_cookie_id() {
-    session = document.cookie.toString()
-    session = session.replace("session=", "")
-    return session
-}
-
-
+fetch("/heartbeat",{
+    method: "POST"
+})
 setInterval(() => {
     fetch("/heartbeat",{
-        method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ cookie: get_session_cookie_id() })
+        method: "POST"
     })
-}, 1000)
+}, 60000)

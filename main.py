@@ -5,7 +5,7 @@ import redis
 
 
 app = create_app()
-redis_server = redis.Redis(host="localhost", port=6379)
+
 
 @app.before_request
 def before_request():
