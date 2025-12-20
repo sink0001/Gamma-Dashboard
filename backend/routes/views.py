@@ -5,6 +5,14 @@ from backend.models.Cache_handler import Cache_handler
 views = Blueprint("views", __name__)
 
 
+def cache_searched_stocks_data(ticker: str, session_id: str, heartbeat_interval: int) -> None:
+    stock = Stock(ticker, True)
+    cache_handler = Cache_handler()
+    serialized_data = stock.serialize_financial_statements_for_caching(stock.get_financial_statements())
+    cache_handler.cache(session_id, serialized_data, heartbeat_interval)
+    print(cache_handler.get_key_value(session_id))
+
+
 @views.route("/", methods=["GET", "POST"])
 def home_page():
     if request.method == "GET":
@@ -17,6 +25,7 @@ def home_page():
             return render_template("base.html")
         try:
             stock = Stock(ticker, False)
+            cache_searched_stocks_data(ticker, session["session_id"], 60)
             return redirect(url_for("views.analysis_page"))
         except Exception as e:
             flash(e.args[0])
@@ -25,7 +34,7 @@ def home_page():
 
 @views.route("/stock-analysis", methods=["GET", "POST"])
 def analysis_page():
-    if request.method == "GET":
+    if request.method == "GET": # this can only happen if the ticker exists
         return render_template("stock-analysis.html")
     else:
         '''
@@ -37,7 +46,7 @@ def analysis_page():
             flash("Please Enter a ticker")
             return render_template("stock-analysis.html")
         try:
-            stock = Stock(ticker, False)
+            cache_searched_stocks_data(ticker, session["session_id"], 60)
             return redirect(url_for("views.analysis_page"))
         except Exception as e:
             flash(e.args[0])

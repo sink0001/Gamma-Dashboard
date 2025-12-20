@@ -5,7 +5,7 @@ class Cache_handler:
     def __init__(self):
         self.redis_connection = cache_services.get_redis_connection()
 
-    def cache_something(self, key: str, to_cache: dict, heartbeat_interval: int) -> None:
+    def cache(self, key: str, to_cache: dict, heartbeat_interval: int) -> None:
         if self.check_key_presence(key):
             time_left_to_live = self.redis_connection.ttl(key)
             self.redis_connection.delete(key)
