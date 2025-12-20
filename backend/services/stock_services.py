@@ -30,7 +30,7 @@ def verify_stock_ticker_exists(ticker: str) -> bool:
         return False
 
 
-def get_financial_statements(ticker: str):
+def get_financial_statements(ticker: str) -> dict[str, list[dict]]:
     financial_statements = dict()
 
     quarterly_income_statements = call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={API_KEY}&period=quarter&limit=4")
@@ -48,3 +48,10 @@ def get_financial_statements(ticker: str):
     financial_statements["annual_cashflow_statements"] = annual_cashflow_statements
 
     return financial_statements
+
+
+def serialize_financial_statements_for_caching(statements: dict[str, list[dict]]) -> dict[str, str]:
+    serialized_statements = dict()
+    for key in statements:
+        serialized_statements[key] = str(statements[key])
+    return serialized_statements
