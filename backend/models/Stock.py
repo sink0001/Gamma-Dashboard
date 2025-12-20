@@ -12,3 +12,13 @@ class Stock:
             if not valid:
                 raise Exception(f"Sorry, we don't know the ticker {ticker}")
         self.ticker = ticker
+
+    def get_financial_statements(self):
+        financial_statements = stock_services.get_financial_statements(self.ticker)
+        return financial_statements
+
+    def serialize_financial_statements_for_caching(self):
+        pass
+
+    def deserialize_cached_financial_statements(self):
+        pass

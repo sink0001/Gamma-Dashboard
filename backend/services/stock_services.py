@@ -9,10 +9,14 @@ API_KEY = os.getenv("API_KEY")
 
 
 
+def call_api(url: str) -> dict:
+    response = requests.get(url).json()
+    return response
+
+
 def verify_stock_ticker_exists(ticker: str) -> bool:
     try:
-        url = f"https://financialmodelingprep.com/stable/search-symbol?query={ticker}&apikey={API_KEY}"
-        response = requests.get(url).json()
+        response = call_api(f"https://financialmodelingprep.com/stable/search-symbol?query={ticker}&apikey={API_KEY}")
         if response:
             session["current_stock_ticker"] = response[0]["symbol"]
             session["current_stock_name"] = response[0]["name"]
@@ -24,3 +28,23 @@ def verify_stock_ticker_exists(ticker: str) -> bool:
     except Exception as e:
         print(f"Error: {e}")
         return False
+
+
+def get_financial_statements(ticker: str):
+    financial_statements = dict()
+
+    quarterly_income_statements = call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={API_KEY}&period=quarter&limit=4")
+    quarterly_balance_sheets = call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={API_KEY}&period=quarter&limit=4")
+    quarterly_cashflow_statements = call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={API_KEY}&period=quarter&limit=4")
+    financial_statements["quarterly_income_statements"] = quarterly_income_statements
+    financial_statements["quarterly_balance_sheets"] = quarterly_balance_sheets
+    financial_statements["quarterly_cashflow_statements"] = quarterly_cashflow_statements
+
+    annual_income_statements = call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={API_KEY}&period=annual&limit=5")
+    annual_balance_sheets = call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={API_KEY}&period=annual&limit=5")
+    annual_cashflow_statements = call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={API_KEY}&period=annual&limit=5")
+    financial_statements["annual_income_statements"] = annual_income_statements
+    financial_statements["annual_balance_sheets"] = annual_balance_sheets
+    financial_statements["annual_cashflow_statements"] = annual_cashflow_statements
+
+    return financial_statements
