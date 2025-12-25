@@ -6,6 +6,10 @@ views = Blueprint("views", __name__)
 
 
 def cache_searched_stocks_data(ticker: str, session_id: str, heartbeat_interval: int) -> None:
+    '''
+    caches a stock by caching with the session_id as the key
+    and the financial statements of the key as values
+    '''
     stock = Stock(ticker, True)
     cache_handler = Cache_handler()
     serialized_data = stock.serialize_financial_statements_for_caching(stock.get_financial_statements())
