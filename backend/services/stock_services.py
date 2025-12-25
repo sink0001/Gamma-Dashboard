@@ -11,8 +11,11 @@ TWELVEDATA_API_KEY = os.getenv("TWELVEDATA_API_KEY") # use this to get the stock
 
 
 def call_api(url: str) -> dict:
-    response = requests.get(url).json()
-    return response
+    response = requests.get(url)
+    if response.status_code == 429:
+        raise Exception("We are currently at the API calling limit")
+    else:
+        return response.json()
 
 
 def verify_stock_ticker_exists(ticker: str) -> bool:
@@ -31,7 +34,7 @@ def verify_stock_ticker_exists(ticker: str) -> bool:
         return False
 
 
-def get_day_at_date(date: str):  # date in YYYY/MM/DD use Zellers formula
+def get_day_at_date(date: str) -> int:  # date in YYYY/MM/DD use Zellers formula
     if date[8] == 0:
         day_of_month = int(date[9])
     else:
@@ -57,18 +60,17 @@ def get_day_at_date(date: str):  # date in YYYY/MM/DD use Zellers formula
     return day_code
 
 
-def get_price_at_date(ticker: str, date: str): # date in YYYY-MM-DD
-    print(date)
+def get_price_at_date(ticker: str, date: str) -> float: # date in YYYY-MM-DD
     iterations = 0
     while True:
         new_date = datetime.strptime(date, "%Y-%m-%d") - timedelta(days=iterations)
         new_date = new_date.strftime("%Y-%m-%d")
-        response = call_api(f"https://api.twelvedata.com/eod?symbol={ticker}&apikey={TWELVEDATA_API_KEY}&date={new_date}")
-        print(response)
-        if response.get("code") != 400:
-            break
+        weekday = get_day_at_date(new_date)
+        if weekday != 0 and weekday != 1:
+            response = call_api(f"https://api.twelvedata.com/eod?symbol={ticker}&apikey={TWELVEDATA_API_KEY}&date={new_date}")
+            if response.get("code") != 400:
+                break
         iterations += 1
-    print(response)
     closing_price = float(response["close"])
     return round(closing_price, 2)
 
@@ -106,4 +108,4 @@ def serialize_financial_statements_for_caching(statements: dict[str, list[dict]]
         serialized_statements[key] = str(statements[key])
     return serialized_statements
 
-print(get_day_at_date("2024-12-28"))
+print(get_financial_statements("AAPL"))
