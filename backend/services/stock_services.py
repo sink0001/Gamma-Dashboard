@@ -2,6 +2,7 @@ import os
 from dotenv import find_dotenv, load_dotenv
 import requests
 from flask import session
+from datetime import datetime, timedelta
 
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
@@ -30,35 +31,17 @@ def verify_stock_ticker_exists(ticker: str) -> bool:
         return False
 
 
-def get_day_at_date(date: str): # date in YYYY-MM-DD use Zellers formula
-    if date[8] == 0:
-        day_of_month = int(date[9])
-    else:
-        day_of_month = int(date[8:])
-
-    year = int(date[0:4])
-
-    if date[5] == 0:
-        month = int(date[6])
-        if month == 1:
-            month = 13
-            year -= 1
-        elif month == 2:
-            month = 14
-            year -= 1
-    else:
-        month = int(date[5:7])
-
-    year_of_century = year % 100 # this gets the remainder of dividing by 100 i.e. the year of the century
-    century = year // 100 # this isn't the current century, instead it is the number of centuries since the year 1 AD
-
-    day_code = (day_of_month + ((13*(month+1))//5) + year_of_century + (year_of_century//4) + (century//4) - 2*century) % 7 # This is Zellers formula where 0 means Saturday and 6 means friday
-    return day_code
-
-def get_price_at_date(ticker: str, date: str) -> float: # date in YYYY-MM-DD
-    response = call_api(f"https://api.twelvedata.com/eod?symbol={ticker}&apikey={TWELVEDATA_API_KEY}&date={date}")
-    print(response)
-    return response["close"]
+def get_price_at_date(ticker: str, date: str): # date in YYYY-MM-DD
+    iterations = 0
+    while True:
+        new_date = datetime.strptime(date, "%Y-%m-%d") - timedelta(days=iterations)
+        new_date = new_date.strftime("%Y-%m-%d")
+        response = call_api(f"https://api.twelvedata.com/eod?symbol={ticker}&apikey={TWELVEDATA_API_KEY}&date={new_date}")
+        if response.get("code") != 400:
+            break
+        iterations += 1
+    closing_price = float(response["close"])
+    return round(closing_price, 2)
 
 def get_financial_statements(ticker: str) -> dict[str, list[dict]]:
     financial_statements = dict()
@@ -85,3 +68,5 @@ def serialize_financial_statements_for_caching(statements: dict[str, list[dict]]
     for key in statements:
         serialized_statements[key] = str(statements[key])
     return serialized_statements
+
+print(get_price_at_date("AAPL", "2024-09-28"))
