@@ -74,38 +74,36 @@ def get_price_at_date(ticker: str, date: str) -> float: # date in YYYY-MM-DD
     closing_price = float(response["close"])
     return round(closing_price, 2)
 
-def get_financial_statements(ticker: str) -> dict[str, list[dict]]:
-    financial_statements = dict()
+def get_finances(ticker: str) -> dict[str, list[dict]]:
+    finances = dict()
 
     quarterly_income_statements = call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4")
     quarterly_balance_sheets = call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4")
     quarterly_cashflow_statements = call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4")
-    financial_statements["quarterly_income_statements"] = quarterly_income_statements
-    financial_statements["quarterly_balance_sheets"] = quarterly_balance_sheets
-    financial_statements["quarterly_cashflow_statements"] = quarterly_cashflow_statements
-    financial_statements["q1_price"] = get_price_at_date(ticker, quarterly_income_statements[0]["date"])
-    financial_statements["q2_price"] = get_price_at_date(ticker, quarterly_income_statements[1]["date"])
-    financial_statements["q3_price"] = get_price_at_date(ticker, quarterly_income_statements[2]["date"])
-    financial_statements["q4_price"] = get_price_at_date(ticker, quarterly_income_statements[3]["date"])
+    finances["quarterly_income_statements"] = quarterly_income_statements
+    finances["quarterly_balance_sheets"] = quarterly_balance_sheets
+    finances["quarterly_cashflow_statements"] = quarterly_cashflow_statements
+    finances["q1_price"] = get_price_at_date(ticker, quarterly_income_statements[0]["date"])
+    finances["q2_price"] = get_price_at_date(ticker, quarterly_income_statements[1]["date"])
+    finances["q3_price"] = get_price_at_date(ticker, quarterly_income_statements[2]["date"])
+    finances["q4_price"] = get_price_at_date(ticker, quarterly_income_statements[3]["date"])
 
     annual_income_statements = call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4")
     annual_balance_sheets = call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4")
     annual_cashflow_statements = call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4")
-    financial_statements["annual_income_statements"] = annual_income_statements
-    financial_statements["annual_balance_sheets"] = annual_balance_sheets
-    financial_statements["annual_cashflow_statements"] = annual_cashflow_statements
-    financial_statements["y1_price"] = get_price_at_date(ticker, annual_income_statements[0]["date"])
-    financial_statements["y2_price"] = get_price_at_date(ticker, annual_income_statements[1]["date"])
-    financial_statements["y3_price"] = get_price_at_date(ticker, annual_income_statements[2]["date"])
-    financial_statements["y4_price"] = get_price_at_date(ticker, annual_income_statements[3]["date"])
+    finances["annual_income_statements"] = annual_income_statements
+    finances["annual_balance_sheets"] = annual_balance_sheets
+    finances["annual_cashflow_statements"] = annual_cashflow_statements
+    finances["y4_price"] = get_price_at_date(ticker, annual_income_statements[0]["date"])
+    finances["y3_price"] = get_price_at_date(ticker, annual_income_statements[1]["date"])
+    finances["y2_price"] = get_price_at_date(ticker, annual_income_statements[2]["date"])
+    finances["y1_price"] = get_price_at_date(ticker, annual_income_statements[3]["date"])
 
-    return financial_statements
+    return finances
 
 
-def serialize_financial_statements_for_caching(statements: dict[str, list[dict]]) -> dict[str, str]:
+def serialize_finances_for_caching(finances: dict[str, list[dict]]) -> dict[str, str]:
     serialized_statements = dict()
-    for key in statements:
-        serialized_statements[key] = str(statements[key])
+    for key in finances:
+        serialized_statements[key] = str(finances[key])
     return serialized_statements
-
-print(get_financial_statements("AAPL"))

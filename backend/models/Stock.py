@@ -13,14 +13,24 @@ class Stock:
                 raise Exception(f"Sorry, we don't know the ticker {ticker}")
         self.ticker = ticker
 
-    def get_financial_statements(self):
-        financial_statements = stock_services.get_financial_statements(self.ticker)
+    def get_finances(self):
+        financial_statements = stock_services.get_finances(self.ticker)
         return financial_statements
 
-    def serialize_financial_statements_for_caching(self, statements: dict[str, list[dict]]) -> dict[str, str]:
-        return stock_services.serialize_financial_statements_for_caching(statements)
+    def serialize_finances_for_caching(self, statements: dict[str, list[dict]]) -> dict[str, str]:
+        return stock_services.serialize_finances_for_caching(statements)
 
     def deserialize_cached_financial_statements(self, statements: dict[str, str]) -> dict[str, list[dict]]:
         for key in statements:
             statements[key] = eval(statements[key])
         return statements # type: ignore
+    
+    def get_current_quarter(self, quarterly_income_statements: list[dict]) -> int:
+        quarter = quarterly_income_statements[0]["period"]
+        return int(quarter[1]) # because quarter will be Q1 or Q2 etc so quarter[1] is the number
+    
+    def get_quarterly_price(self, quarter: int, finances: dict[str, list[dict]]):
+        return finances.get(f"q{quarter}_price")
+    
+    def quarterly_pe_ratio(self, quarter: int, quarterly_income_statements: list[dict]):
+        pass
