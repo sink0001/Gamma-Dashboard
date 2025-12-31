@@ -1,4 +1,5 @@
 from backend.services import stock_services
+from backend.services import stock_ratios
 
 
 class Stock:
@@ -29,8 +30,13 @@ class Stock:
         quarter = quarterly_income_statements[0]["period"]
         return int(quarter[1]) # because quarter will be Q1 or Q2 etc so quarter[1] is the number
     
-    def get_quarterly_price(self, quarter: int, finances: dict[str, list[dict]]):
-        return finances.get(f"q{quarter}_price")
+    def get_quarterly_price(self, quarter: int, finances: dict[str, list[dict]]) -> float:
+        return finances.get(f"q{quarter}_price") # type: ignore
     
-    def quarterly_pe_ratio(self, quarter: int, quarterly_income_statements: list[dict]):
-        pass
+    def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]):
+        match ratio:
+            case "pe":
+                stock_price = self.get_quarterly_price(quarter, finances)
+                return stock_ratios.quarterly_pe(quarter, finances["quarterly_income_statements"], stock_price)
+            case "pb":
+                pass
