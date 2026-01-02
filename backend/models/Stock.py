@@ -14,17 +14,19 @@ class Stock:
                 raise Exception(f"Sorry, we don't know the ticker {ticker}")
         self.ticker = ticker
 
+
     def get_finances(self):
         financial_statements = stock_services.get_finances(self.ticker)
         return financial_statements
 
-    def serialize_finances_for_caching(self, statements: dict[str, list[dict]]) -> dict[str, str]:
-        return stock_services.serialize_finances_for_caching(statements)
+    def serialize_finances_for_caching(self, finances: dict[str, list[dict]]) -> dict[str, str]:
+        return stock_services.serialize_finances_for_caching(finances)
 
-    def deserialize_cached_financial_statements(self, statements: dict[str, str]) -> dict[str, list[dict]]:
-        for key in statements:
-            statements[key] = eval(statements[key])
-        return statements # type: ignore
+    def deserialize_cached_finances(self, finances: dict[str, str]) -> dict[str, list[dict]]:
+        for key in finances:
+            finances[key] = eval(finances[key])
+        return finances # type: ignore
+    
     
     def get_current_quarter(self, quarterly_income_statements: list[dict]) -> int:
         quarter = quarterly_income_statements[0]["period"]
@@ -34,9 +36,9 @@ class Stock:
         return finances.get(f"q{quarter}_price") # type: ignore
     
     def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]):
+        stock_price = self.get_quarterly_price(quarter, finances)
         match ratio:
             case "pe":
-                stock_price = self.get_quarterly_price(quarter, finances)
                 return stock_ratios.quarterly_pe(quarter, finances["quarterly_income_statements"], stock_price)
             case "pb":
-                pass
+                return stock_ratios.quarterly_pb(quarter, finances["quarterly_balance_sheets"], finances["quarterly_income_statements"] ,stock_price)
