@@ -42,3 +42,6 @@ class Stock:
                 return stock_ratios.quarterly_pe(quarter, finances["quarterly_income_statements"], stock_price)
             case "pb":
                 return stock_ratios.quarterly_pb(quarter, finances["quarterly_balance_sheets"], finances["quarterly_income_statements"] ,stock_price)
+            case "dividend_yield":
+                return stock_ratios.quarterly_dividend_yield(quarter, finances["quarterly_income_statements"], finances["quarterly_cashflow_statements"], stock_price)
+            
