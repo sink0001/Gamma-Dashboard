@@ -49,3 +49,4 @@ class Stock:
             case "roe":
                 return stock_ratios.quarterly_return_on_equity(quarter, finances["quarterly_income_statements"], finances["quarterly_balance_sheets"], stock_price)
             
+            
