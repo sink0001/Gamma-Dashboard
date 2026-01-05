@@ -44,3 +44,10 @@ def quarterly_debt_to_equity(quarter: int, quarterly_balance_sheets: list[dict],
     shareholders_equity = quarterly_balance_sheets[4-quarter]["totalStockholdersEquity"]
     debt_to_equity_ratio = total_debt/shareholders_equity
     return round(debt_to_equity_ratio, 2)
+
+
+def quarterly_current_ratio(quarter: int, quarterly_balance_sheets: list[dict], stock_price_at_quarter: float) -> float:
+    current_assets = quarterly_balance_sheets[4-quarter]["totalCurrentAssets"]
+    current_liabilities = quarterly_balance_sheets[4-quarter]["totalCurrentLiabilities"]
+    current_ratio = current_assets/current_liabilities
+    return round(current_ratio, 2)
