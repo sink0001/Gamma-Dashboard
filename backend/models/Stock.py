@@ -41,9 +41,11 @@ class Stock:
             case "pe":
                 return stock_ratios.quarterly_price_to_earnings(quarter, finances["quarterly_income_statements"], stock_price)
             case "pb":
-                return stock_ratios.quarterly_price_to_book(quarter, finances["quarterly_balance_sheets"], finances["quarterly_income_statements"] ,stock_price)
+                return stock_ratios.quarterly_price_to_book(quarter, finances["quarterly_income_statements"], finances["quarterly_balance_sheets"] ,stock_price)
             case "dividend_yield":
                 return stock_ratios.quarterly_dividend_yield(quarter, finances["quarterly_income_statements"], finances["quarterly_cashflow_statements"], stock_price)
             case "ps":
                 return stock_ratios.quarterly_price_to_sales(quarter, finances["quarterly_income_statements"], stock_price)
+            case "roe":
+                return stock_ratios.quarterly_return_on_equity(quarter, finances["quarterly_income_statements"], finances["quarterly_balance_sheets"], stock_price)
             
