@@ -52,3 +52,5 @@ class Stock:
                 return stock_ratios.quarterly_debt_to_equity(quarter, finances["quarterly_balance_sheets"], stock_price)
             case "current_ratio":
                 return stock_ratios.quarterly_current_ratio(quarter, finances["quarterly_balance_sheets"], stock_price)
+            case "quick_ratio":
+                return stock_ratios.quarterly_quick_ratio(quarter, finances["quarterly_balance_sheets"], stock_price)
