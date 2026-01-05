@@ -1,12 +1,12 @@
 
 
-def quarterly_pe(quarter: int, quarterly_income_statements: list[dict], stock_price_at_quarter: float) -> float:
+def quarterly_price_to_earnings(quarter: int, quarterly_income_statements: list[dict], stock_price_at_quarter: float) -> float:
     eps = quarterly_income_statements[4-quarter]["eps"]
-    pe_ratio = stock_price_at_quarter/(4*eps) # type: ignore
+    pe_ratio = stock_price_at_quarter/eps
     return round(pe_ratio, 2)
 
 
-def quarterly_pb(quarter: int, quarterly_balance_sheets: list[dict], quarterly_income_statements: list[dict], stock_price_at_quarter: float) -> float:
+def quarterly_price_to_book(quarter: int, quarterly_balance_sheets: list[dict], quarterly_income_statements: list[dict], stock_price_at_quarter: float) -> float:
     total_assets = quarterly_balance_sheets[4-quarter]["totalAssets"]
     total_liabilities = quarterly_balance_sheets[4-quarter]["totalLiabilities"]
     weighted_average_shares_outstanding = quarterly_income_statements[4-quarter]["weightedAverageShsOut"]
@@ -21,3 +21,11 @@ def quarterly_dividend_yield(quarter: int, quarterly_income_statements: list[dic
     dividends_per_share = net_dividends_paid/weighted_average_shares_outstanding
     dividend_yield = (dividends_per_share/stock_price_at_quarter)*100
     return round(dividend_yield, 2)
+
+
+def quarterly_price_to_sales(quarter: int, quarterly_income_statements: list[dict], stock_price_at_quarter: float) -> float:
+    weighted_average_shares_outstanding = quarterly_income_statements[4-quarter]["weightedAverageShsOut"]
+    market_cap = weighted_average_shares_outstanding*stock_price_at_quarter
+    revenue = quarterly_income_statements[4-quarter]["revenue"]
+    ps_ratio = market_cap/revenue
+    return round(ps_ratio, 2)

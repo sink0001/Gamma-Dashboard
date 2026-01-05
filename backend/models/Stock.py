@@ -35,13 +35,15 @@ class Stock:
     def get_quarterly_price(self, quarter: int, finances: dict[str, list[dict]]) -> float:
         return finances.get(f"q{quarter}_price") # type: ignore
     
-    def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]):
+    def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]): # some ratios like p/e ratio or p/s ratio are higher in singled out quarters because earnings are lower in a single quarter than in a year
         stock_price = self.get_quarterly_price(quarter, finances)
         match ratio:
             case "pe":
-                return stock_ratios.quarterly_pe(quarter, finances["quarterly_income_statements"], stock_price)
+                return stock_ratios.quarterly_price_to_earnings(quarter, finances["quarterly_income_statements"], stock_price)
             case "pb":
-                return stock_ratios.quarterly_pb(quarter, finances["quarterly_balance_sheets"], finances["quarterly_income_statements"] ,stock_price)
+                return stock_ratios.quarterly_price_to_book(quarter, finances["quarterly_balance_sheets"], finances["quarterly_income_statements"] ,stock_price)
             case "dividend_yield":
                 return stock_ratios.quarterly_dividend_yield(quarter, finances["quarterly_income_statements"], finances["quarterly_cashflow_statements"], stock_price)
+            case "ps":
+                return stock_ratios.quarterly_price_to_sales(quarter, finances["quarterly_income_statements"], stock_price)
             
