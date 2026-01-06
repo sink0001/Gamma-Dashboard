@@ -60,8 +60,11 @@ def quick_ratio(balance_sheet: dict) -> float:
     return round(quick_ratio, 2)
 
 
-def ebitda(income_statement: dict) -> int:
-    return income_statement["ebitda"]
+def ebitda_margin(income_statement: dict) -> float:
+    ebitda = income_statement["ebitda"]
+    revenue = income_statement["revenue"]
+    ebitda_margin = (ebitda/revenue)*100
+    return round(ebitda_margin, 2)
 
 
 def return_on_assets(income_statement: dict, balance_sheet: dict) -> float:

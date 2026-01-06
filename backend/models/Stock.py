@@ -57,8 +57,8 @@ class Stock:
                 return stock_ratios.current_ratio(balance_sheet)
             case "quick_ratio":
                 return stock_ratios.quick_ratio(balance_sheet)
-            case "ebitda":
-                return stock_ratios.ebitda(income_statement)
+            case "ebitda_margin":
+                return stock_ratios.ebitda_margin(income_statement)
             case "roa":
                 return stock_ratios.return_on_assets(income_statement, balance_sheet)
             case "fcf_margin":
