@@ -38,24 +38,27 @@ class Stock:
     def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]): # some ratios like p/e ratio or p/s ratio are higher in singled out quarters because earnings are lower in a single quarter than in a year
         # TODO: stop repeating [4-quarter] and just pass that and store all 3 statements as variables at the top
         stock_price = self.get_quarterly_price(quarter, finances)
+        income_statement = finances["quarterly_income_statements"][4-quarter]
+        balance_sheet = finances["quarterly_balance_sheets"][4-quarter]
+        cashflow_statement = finances["quarterly_cashflow_statements"][4-quarter]
         match ratio:
             case "pe":
-                return stock_ratios.quarterly_price_to_earnings(quarter, finances["quarterly_income_statements"], stock_price)
+                return stock_ratios.price_to_earnings(income_statement, stock_price)
             case "pb":
-                return stock_ratios.quarterly_price_to_book(quarter, finances["quarterly_income_statements"], finances["quarterly_balance_sheets"] ,stock_price)
+                return stock_ratios.price_to_book(income_statement, balance_sheet ,stock_price)
             case "dividend_yield":
-                return stock_ratios.quarterly_dividend_yield(quarter, finances["quarterly_income_statements"], finances["quarterly_cashflow_statements"], stock_price)
+                return stock_ratios.dividend_yield(income_statement, cashflow_statement, stock_price)
             case "ps":
-                return stock_ratios.quarterly_price_to_sales(quarter, finances["quarterly_income_statements"], stock_price)
+                return stock_ratios.price_to_sales(income_statement, stock_price)
             case "roe":
-                return stock_ratios.quarterly_return_on_equity(quarter, finances["quarterly_income_statements"], finances["quarterly_balance_sheets"], stock_price)
+                return stock_ratios.return_on_equity(income_statement, balance_sheet)
             case "debt_to_equity":
-                return stock_ratios.quarterly_debt_to_equity(quarter, finances["quarterly_balance_sheets"], stock_price)
+                return stock_ratios.debt_to_equity(balance_sheet)
             case "current_ratio":
-                return stock_ratios.quarterly_current_ratio(quarter, finances["quarterly_balance_sheets"], stock_price)
+                return stock_ratios.current_ratio(balance_sheet)
             case "quick_ratio":
-                return stock_ratios.quarterly_quick_ratio(quarter, finances["quarterly_balance_sheets"], stock_price)
+                return stock_ratios.quick_ratio(balance_sheet)
             case "ebitda":
-                return stock_ratios.quarterly_ebitda(quarter, finances["quarterly_income_statements"])
+                return stock_ratios.ebitda(income_statement)
             case "roa":
-                return stock_ratios.quarterly_return_on_assets(quarter, finances["quarterly_income_statements"], finances["quarterly_balance_sheets"])
+                return stock_ratios.return_on_assets(income_statement, balance_sheet)
