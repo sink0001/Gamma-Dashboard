@@ -69,3 +69,13 @@ def return_on_assets(income_statement: dict, balance_sheet: dict) -> float:
     total_assets = balance_sheet["totalAssets"]
     roa = (net_income/total_assets)*100
     return round(roa, 2)
+
+
+def free_cashflow_margin(income_statement: dict, cashflow_statement: dict) -> float:
+    operating_cashflow = cashflow_statement["operatingCashFlow"]
+    capital_expenditure = int(cashflow_statement["capitalExpenditure"])*-1
+    fcf = operating_cashflow - capital_expenditure
+    revenue = income_statement["revenue"]
+    fcf_margin = (fcf/revenue)*100
+    return round(fcf_margin, 2)
+    

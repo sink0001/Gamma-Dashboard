@@ -36,7 +36,6 @@ class Stock:
         return finances.get(f"q{quarter}_price") # type: ignore
     
     def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]): # some ratios like p/e ratio or p/s ratio are higher in singled out quarters because earnings are lower in a single quarter than in a year
-        # TODO: stop repeating [4-quarter] and just pass that and store all 3 statements as variables at the top
         stock_price = self.get_quarterly_price(quarter, finances)
         income_statement = finances["quarterly_income_statements"][4-quarter]
         balance_sheet = finances["quarterly_balance_sheets"][4-quarter]
@@ -62,3 +61,5 @@ class Stock:
                 return stock_ratios.ebitda(income_statement)
             case "roa":
                 return stock_ratios.return_on_assets(income_statement, balance_sheet)
+            case "fcf_margin":
+                return stock_ratios.free_cashflow_margin(income_statement, cashflow_statement)
