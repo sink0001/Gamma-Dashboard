@@ -36,6 +36,7 @@ class Stock:
         return finances.get(f"q{quarter}_price") # type: ignore
     
     def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]): # some ratios like p/e ratio or p/s ratio are higher in singled out quarters because earnings are lower in a single quarter than in a year
+        # TODO: stop repeating [4-quarter] and just pass that and store all 3 statements as variables at the top
         stock_price = self.get_quarterly_price(quarter, finances)
         match ratio:
             case "pe":
@@ -54,3 +55,7 @@ class Stock:
                 return stock_ratios.quarterly_current_ratio(quarter, finances["quarterly_balance_sheets"], stock_price)
             case "quick_ratio":
                 return stock_ratios.quarterly_quick_ratio(quarter, finances["quarterly_balance_sheets"], stock_price)
+            case "ebitda":
+                return stock_ratios.quarterly_ebitda(quarter, finances["quarterly_income_statements"])
+            case "roa":
+                return stock_ratios.quarterly_return_on_assets(quarter, finances["quarterly_income_statements"], finances["quarterly_balance_sheets"])

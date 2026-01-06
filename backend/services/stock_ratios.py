@@ -32,7 +32,6 @@ def quarterly_price_to_sales(quarter: int, quarterly_income_statements: list[dic
 
 
 def quarterly_return_on_equity(quarter: int, quarterly_income_statements: list[dict], quarterly_balance_sheets: list[dict], stock_price_at_quarter: float) -> float:
-    # net_income/shareholders equity
     net_income = quarterly_income_statements[4-quarter]["netIncome"]
     shareholders_equity = quarterly_balance_sheets[4-quarter]["totalStockholdersEquity"]
     roe_ratio = (net_income/shareholders_equity)*100
@@ -59,3 +58,14 @@ def quarterly_quick_ratio(quarter: int, quarterly_balance_sheets: list[dict], st
     inventory = quarterly_balance_sheets[4-quarter]["inventory"]
     quick_ratio = (current_assets-inventory)/current_liabilities
     return round(quick_ratio, 2)
+
+
+def quarterly_ebitda(quarter: int, quarterly_income_statements: list[dict]) -> int:
+    return quarterly_income_statements[4-quarter]["ebitda"]
+
+
+def quarterly_return_on_assets(quarter: int, quarterly_income_statements: list[dict], quarterly_balance_sheets: list[dict]) -> float:
+    net_income = quarterly_income_statements[4-quarter]["netIncome"]
+    total_assets = quarterly_balance_sheets[4-quarter]["totalAssets"]
+    roa = (net_income/total_assets)*100
+    return round(roa, 2)
