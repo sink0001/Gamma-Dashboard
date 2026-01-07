@@ -81,4 +81,10 @@ def free_cashflow_margin(income_statement: dict, cashflow_statement: dict) -> fl
     revenue = income_statement["revenue"]
     fcf_margin = (fcf/revenue)*100
     return round(fcf_margin, 2)
-    
+
+
+def gross_margin(income_statement: dict) -> float:
+    revenue = income_statement["revenue"]
+    cost_of_revenue = income_statement["costOfRevenue"]
+    gross_margin = ((revenue - cost_of_revenue)/revenue)*100
+    return round(gross_margin, 2)

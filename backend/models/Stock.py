@@ -63,3 +63,5 @@ class Stock:
                 return stock_ratios.return_on_assets(income_statement, balance_sheet)
             case "fcf_margin":
                 return stock_ratios.free_cashflow_margin(income_statement, cashflow_statement)
+            case "gross_margin":
+                return stock_ratios.gross_margin(income_statement)
