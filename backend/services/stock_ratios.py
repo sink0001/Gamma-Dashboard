@@ -88,3 +88,10 @@ def gross_margin(income_statement: dict) -> float:
     cost_of_revenue = income_statement["costOfRevenue"]
     gross_margin = ((revenue - cost_of_revenue)/revenue)*100
     return round(gross_margin, 2)
+
+
+def operating_margin(income_statement: dict) -> float:
+    operating_income = income_statement["operatingIncome"]
+    revenue = income_statement["revenue"]
+    operating_margin = (operating_income/revenue)*100
+    return round(operating_margin, 2)

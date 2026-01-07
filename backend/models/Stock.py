@@ -37,9 +37,7 @@ class Stock:
     
     def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]): # some ratios like p/e ratio or p/s ratio are higher in singled out quarters because earnings are lower in a single quarter than in a year
         stock_price = self.get_quarterly_price(quarter, finances)
-        income_statement = finances["quarterly_income_statements"][4-quarter]
-        balance_sheet = finances["quarterly_balance_sheets"][4-quarter]
-        cashflow_statement = finances["quarterly_cashflow_statements"][4-quarter]
+        income_statement, balance_sheet, cashflow_statement = finances["quarterly_income_statements"][4-quarter], finances["quarterly_balance_sheets"][4-quarter], finances["quarterly_cashflow_statements"][4-quarter]
         match ratio:
             case "pe":
                 return stock_ratios.price_to_earnings(income_statement, stock_price)
@@ -65,3 +63,5 @@ class Stock:
                 return stock_ratios.free_cashflow_margin(income_statement, cashflow_statement)
             case "gross_margin":
                 return stock_ratios.gross_margin(income_statement)
+            case "operating_margin":
+                return stock_ratios.operating_margin(income_statement)
