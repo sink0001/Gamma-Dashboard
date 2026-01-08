@@ -14,7 +14,6 @@ class Stock:
                 raise Exception(f"Sorry, we don't know the ticker {ticker}")
         self.ticker = ticker
 
-
     def get_finances(self):
         financial_statements = stock_services.get_finances(self.ticker)
         return financial_statements
@@ -27,6 +26,36 @@ class Stock:
             finances[key] = eval(finances[key])
         return finances # type: ignore
     
+    def get_ratio(self, ratio: str, income_statement: dict, balance_sheet: dict, cashflow_statement: dict, stock_price: float) -> float:
+        match ratio:
+            case "pe":
+                return stock_ratios.price_to_earnings(income_statement, stock_price)
+            case "pb":
+                return stock_ratios.price_to_book(income_statement, balance_sheet ,stock_price)
+            case "dividend_yield":
+                return stock_ratios.dividend_yield(income_statement, cashflow_statement, stock_price)
+            case "ps":
+                return stock_ratios.price_to_sales(income_statement, stock_price)
+            case "roe":
+                return stock_ratios.return_on_equity(income_statement, balance_sheet)
+            case "debt_to_equity":
+                return stock_ratios.debt_to_equity(balance_sheet)
+            case "current_ratio":
+                return stock_ratios.current_ratio(balance_sheet)
+            case "quick_ratio":
+                return stock_ratios.quick_ratio(balance_sheet)
+            case "ebitda_margin":
+                return stock_ratios.ebitda_margin(income_statement)
+            case "roa":
+                return stock_ratios.return_on_assets(income_statement, balance_sheet)
+            case "fcf_margin":
+                return stock_ratios.free_cashflow_margin(income_statement, cashflow_statement)
+            case "gross_margin":
+                return stock_ratios.gross_margin(income_statement)
+            case "operating_margin":
+                return stock_ratios.operating_margin(income_statement)
+            case _:
+                raise Exception("error in ratio request")
     
     def latest_quarter(self, quarterly_income_statements: list[dict]) -> int:
         quarter = quarterly_income_statements[0]["period"]
@@ -39,35 +68,7 @@ class Stock:
         quarters_index = 4-quarter
         stock_price = self.get_price_at_quarter(quarter, finances)
         income_statement, balance_sheet, cashflow_statement = finances["quarterly_income_statements"][quarters_index], finances["quarterly_balance_sheets"][quarters_index], finances["quarterly_cashflow_statements"][quarters_index]
-        match ratio:
-            case "pe":
-                return stock_ratios.price_to_earnings(income_statement, stock_price)
-            case "pb":
-                return stock_ratios.price_to_book(income_statement, balance_sheet ,stock_price)
-            case "dividend_yield":
-                return stock_ratios.dividend_yield(income_statement, cashflow_statement, stock_price)
-            case "ps":
-                return stock_ratios.price_to_sales(income_statement, stock_price)
-            case "roe":
-                return stock_ratios.return_on_equity(income_statement, balance_sheet)
-            case "debt_to_equity":
-                return stock_ratios.debt_to_equity(balance_sheet)
-            case "current_ratio":
-                return stock_ratios.current_ratio(balance_sheet)
-            case "quick_ratio":
-                return stock_ratios.quick_ratio(balance_sheet)
-            case "ebitda_margin":
-                return stock_ratios.ebitda_margin(income_statement)
-            case "roa":
-                return stock_ratios.return_on_assets(income_statement, balance_sheet)
-            case "fcf_margin":
-                return stock_ratios.free_cashflow_margin(income_statement, cashflow_statement)
-            case "gross_margin":
-                return stock_ratios.gross_margin(income_statement)
-            case "operating_margin":
-                return stock_ratios.operating_margin(income_statement)
-            case _:
-                raise Exception("error in ratio request")
+        return self.get_ratio(ratio, income_statement, balance_sheet, cashflow_statement, stock_price)
             
     def latest_annum(self, finances: dict[str, list[dict]]) -> int:
         return int(finances["annual_income_statements"][0]["fiscalYear"])
@@ -79,32 +80,4 @@ class Stock:
         years_index = self.latest_annum(finances) - year
         stock_price = self.get_price_at_annum(4-years_index, finances)
         income_statement, balance_sheet, cashflow_statement = finances["annual_income_statements"][years_index], finances["annual_balance_sheets"][years_index], finances["annual_cashflow_statements"][years_index]
-        match ratio:
-            case "pe":
-                return stock_ratios.price_to_earnings(income_statement, stock_price)
-            case "pb":
-                return stock_ratios.price_to_book(income_statement, balance_sheet ,stock_price)
-            case "dividend_yield":
-                return stock_ratios.dividend_yield(income_statement, cashflow_statement, stock_price)
-            case "ps":
-                return stock_ratios.price_to_sales(income_statement, stock_price)
-            case "roe":
-                return stock_ratios.return_on_equity(income_statement, balance_sheet)
-            case "debt_to_equity":
-                return stock_ratios.debt_to_equity(balance_sheet)
-            case "current_ratio":
-                return stock_ratios.current_ratio(balance_sheet)
-            case "quick_ratio":
-                return stock_ratios.quick_ratio(balance_sheet)
-            case "ebitda_margin":
-                return stock_ratios.ebitda_margin(income_statement)
-            case "roa":
-                return stock_ratios.return_on_assets(income_statement, balance_sheet)
-            case "fcf_margin":
-                return stock_ratios.free_cashflow_margin(income_statement, cashflow_statement)
-            case "gross_margin":
-                return stock_ratios.gross_margin(income_statement)
-            case "operating_margin":
-                return stock_ratios.operating_margin(income_statement)
-            case _:
-                raise Exception("error in ratio request")
+        return self.get_ratio(ratio, income_statement, balance_sheet, cashflow_statement, stock_price)
