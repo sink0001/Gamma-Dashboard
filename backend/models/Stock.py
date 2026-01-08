@@ -24,6 +24,9 @@ class Stock:
     def deserialize_cached_finances(self, finances: dict[str, str]) -> dict[str, list[dict]]:
         for key in finances:
             finances[key] = eval(finances[key])
+        self.finances = finances
+        self.quarterly_income_statements, self.quarterly_balance_sheets, self.quarterly_cashflow_statements = finances["quarterly_income_statements"], finances["quarterly_balance_sheets"], finances["quarterly_cashflow_statements"]
+        self.annual_income_statements, self.annual_balance_sheets, self.annual_cashflow_statements = finances["annual_income_statements"], finances["annual_balance_sheets"], finances["annual_cashflow_statements"]
         return finances # type: ignore
     
     def get_ratio(self, ratio: str, income_statement: dict, balance_sheet: dict, cashflow_statement: dict, stock_price: float) -> float:
@@ -57,27 +60,27 @@ class Stock:
             case _:
                 raise Exception("error in ratio request")
     
-    def latest_quarter(self, quarterly_income_statements: list[dict]) -> int:
-        quarter = quarterly_income_statements[0]["period"]
+    def get_latest_quarter(self) -> int:
+        quarter = self.quarterly_income_statements[0]["period"] # type: ignore
         return int(quarter[1]) # because quarter will be Q1 or Q2 etc so quarter[1] is the number
     
-    def get_price_at_quarter(self, quarter: int, finances: dict[str, list[dict]]) -> float:
-        return finances[f"q{quarter}_price"] # type: ignore
+    def get_price_at_quarter(self, quarter: int) -> float:
+        return self.finances[f"q{quarter}_price"] # type: ignore
     
-    def quarterly_ratio(self, ratio: str, quarter: int, finances: dict[str, list[dict]]) -> float: # some ratios like p/e ratio or p/s ratio are higher in singled out quarters because earnings are lower in a single quarter than in a year
+    def quarterly_ratio(self, ratio: str, quarter: int) -> float: # some ratios like p/e ratio or p/s ratio are higher in singled out quarters because earnings are lower in a single quarter than in a year
         quarters_index = 4-quarter
-        stock_price = self.get_price_at_quarter(quarter, finances)
-        income_statement, balance_sheet, cashflow_statement = finances["quarterly_income_statements"][quarters_index], finances["quarterly_balance_sheets"][quarters_index], finances["quarterly_cashflow_statements"][quarters_index]
-        return self.get_ratio(ratio, income_statement, balance_sheet, cashflow_statement, stock_price)
+        stock_price = self.get_price_at_quarter(quarter)
+        income_statement, balance_sheet, cashflow_statement = self.quarterly_income_statements[quarters_index], self.quarterly_balance_sheets[quarters_index], self.quarterly_cashflow_statements[quarters_index]
+        return self.get_ratio(ratio, income_statement, balance_sheet, cashflow_statement, stock_price) # type: ignore
             
-    def latest_annum(self, finances: dict[str, list[dict]]) -> int:
-        return int(finances["annual_income_statements"][0]["fiscalYear"])
+    def get_latest_annum(self) -> int:
+        return int(self.annual_income_statements[0]["fiscalYear"]) # type: ignore
     
-    def get_price_at_annum(self, annum: int, finances: dict[str, list[dict]]) -> float:
-        return finances[f"y{annum}_price"] # type: ignore
+    def get_price_at_annum(self, annum: int) -> float:
+        return self.finances[f"y{annum}_price"] # type: ignore
     
-    def annual_ratio(self, ratio: str, year: int, finances: dict[str, list[dict]]):
-        years_index = self.latest_annum(finances) - year
-        stock_price = self.get_price_at_annum(4-years_index, finances)
-        income_statement, balance_sheet, cashflow_statement = finances["annual_income_statements"][years_index], finances["annual_balance_sheets"][years_index], finances["annual_cashflow_statements"][years_index]
-        return self.get_ratio(ratio, income_statement, balance_sheet, cashflow_statement, stock_price)
+    def annual_ratio(self, ratio: str, year: int):
+        years_index = self.get_latest_annum() - year
+        stock_price = self.get_price_at_annum(4-years_index)
+        income_statement, balance_sheet, cashflow_statement = self.annual_income_statements[years_index], self.annual_balance_sheets[years_index], self.annual_cashflow_statements[years_index]
+        return self.get_ratio(ratio, income_statement, balance_sheet, cashflow_statement, stock_price) # type: ignore
