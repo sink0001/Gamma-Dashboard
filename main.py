@@ -2,7 +2,7 @@ from frontend import create_app
 import uuid
 from flask import session
 import redis
-
+# TODO: once back on main branch, put finances and the statements into Stock class self after deserializing them and make api calls async, keep finances as is for now for easier testing
 
 app = create_app()
 

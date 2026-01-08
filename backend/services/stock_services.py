@@ -94,7 +94,7 @@ def get_finances(ticker: str) -> dict[str, list[dict]]:
     finances["annual_income_statements"] = annual_income_statements
     finances["annual_balance_sheets"] = annual_balance_sheets
     finances["annual_cashflow_statements"] = annual_cashflow_statements
-    finances["y4_price"] = get_price_at_date(ticker, annual_income_statements[0]["date"])
+    finances["y4_price"] = get_price_at_date(ticker, annual_income_statements[0]["date"]) # y4 is most recent and y1 is least recent like with quarters
     finances["y3_price"] = get_price_at_date(ticker, annual_income_statements[1]["date"])
     finances["y2_price"] = get_price_at_date(ticker, annual_income_statements[2]["date"])
     finances["y1_price"] = get_price_at_date(ticker, annual_income_statements[3]["date"])

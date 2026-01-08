@@ -16,7 +16,7 @@ def price_to_book(income_statement: dict, balance_sheet: dict, stock_price: floa
 
 
 def dividend_yield(income_statement: dict, cashflow_statement: dict, stock_price: float) -> float:
-    net_dividends_paid = cashflow_statement["netDividendsPaid"]
+    net_dividends_paid = cashflow_statement["netDividendsPaid"]*-1
     weighted_average_shares_outstanding = income_statement["weightedAverageShsOut"]
     dividends_per_share = net_dividends_paid/weighted_average_shares_outstanding
     dividend_yield = (dividends_per_share/stock_price)*100

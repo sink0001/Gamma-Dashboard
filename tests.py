@@ -15,6 +15,12 @@ def test_quarterly_ratio(ratio: str) -> None:
     for i in range(1, 5):
         print(stock.quarterly_ratio(ratio, i, finances))
 
+def test_all_annual() -> None:
+    for ratio in ratios:
+        test_annual_ratio(ratio)
 
-#test_all_quarterly()
-test_quarterly_ratio("operating_margin")
+def test_annual_ratio(ratio: str) -> None:
+    for i in range(2022, 2026):
+        print(f"{i} {ratio}: {stock.annual_ratio(ratio, i, finances)}")
+
+test_all_annual()
