@@ -5,7 +5,7 @@ stock = Stock("aapl", True)
 finances = stock.get_finances()
 stock.deserialize_cached_finances(stock.serialize_finances_for_caching(finances))
 
-ratios = ["pe", "pb", "dividend_yield", "ps", "roe", "debt_to_equity", "current_ratio", "quick_ratio", "ebitda_margin", "roa", "fcf_margin", "gross_margin", "operating_margin"]
+ratios = ["pe", "pb", "dividend_yield", "ps", "roe", "debt_to_equity", "current_ratio", "quick_ratio", "ebitda_margin", "roa", "fcf_margin", "gross_margin", "operating_margin", "pfcf"]
 
 def test_all_quarterly() -> None:
     for ratio in ratios:

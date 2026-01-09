@@ -20,13 +20,16 @@ class Stock:
 
     def serialize_finances_for_caching(self, finances: dict[str, list[dict]]) -> dict[str, str]:
         return stock_services.serialize_finances_for_caching(finances)
+    
+    def set_finances(self, finances: dict[str, list[dict]]) -> None:
+        self.finances = finances
+        self.quarterly_income_statements, self.quarterly_balance_sheets, self.quarterly_cashflow_statements = finances["quarterly_income_statements"], finances["quarterly_balance_sheets"], finances["quarterly_cashflow_statements"]
+        self.annual_income_statements, self.annual_balance_sheets, self.annual_cashflow_statements = finances["annual_income_statements"], finances["annual_balance_sheets"], finances["annual_cashflow_statements"]
 
     def deserialize_cached_finances(self, finances: dict[str, str]) -> dict[str, list[dict]]:
         for key in finances:
             finances[key] = eval(finances[key])
-        self.finances = finances
-        self.quarterly_income_statements, self.quarterly_balance_sheets, self.quarterly_cashflow_statements = finances["quarterly_income_statements"], finances["quarterly_balance_sheets"], finances["quarterly_cashflow_statements"]
-        self.annual_income_statements, self.annual_balance_sheets, self.annual_cashflow_statements = finances["annual_income_statements"], finances["annual_balance_sheets"], finances["annual_cashflow_statements"]
+        self.set_finances(finances) # type: ignore
         return finances # type: ignore
     
     def get_ratio(self, ratio: str, income_statement: dict, balance_sheet: dict, cashflow_statement: dict, stock_price: float) -> float:
@@ -57,6 +60,8 @@ class Stock:
                 return stock_ratios.gross_margin(income_statement)
             case "operating_margin":
                 return stock_ratios.operating_margin(income_statement)
+            case "pfcf":
+                return stock_ratios.price_to_free_cashflow(income_statement, cashflow_statement, stock_price)
             case _:
                 raise Exception("error in ratio request")
     

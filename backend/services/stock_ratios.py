@@ -1,5 +1,3 @@
-
-
 def price_to_earnings(income_statement: dict, stock_price: float) -> float:
     eps = income_statement["eps"]
     pe_ratio = stock_price/eps
@@ -74,10 +72,13 @@ def return_on_assets(income_statement: dict, balance_sheet: dict) -> float:
     return round(roa, 2)
 
 
-def free_cashflow_margin(income_statement: dict, cashflow_statement: dict) -> float:
+def free_cashflow(cashflow_statement: dict) -> int:
     operating_cashflow = cashflow_statement["operatingCashFlow"]
     capital_expenditure = int(cashflow_statement["capitalExpenditure"])*-1
-    fcf = operating_cashflow - capital_expenditure
+    return (operating_cashflow - capital_expenditure)
+
+def free_cashflow_margin(income_statement: dict, cashflow_statement: dict) -> float:
+    fcf = free_cashflow(cashflow_statement)
     revenue = income_statement["revenue"]
     fcf_margin = (fcf/revenue)*100
     return round(fcf_margin, 2)
@@ -95,3 +96,11 @@ def operating_margin(income_statement: dict) -> float:
     revenue = income_statement["revenue"]
     operating_margin = (operating_income/revenue)*100
     return round(operating_margin, 2)
+
+
+def price_to_free_cashflow(income_statement: dict, cashflow_statement: dict, stock_price: float) -> float:
+    fcf = free_cashflow(cashflow_statement)
+    weighted_average_shares_outstanding = income_statement["weightedAverageShsOut"]
+    fcf_per_share = fcf/weighted_average_shares_outstanding
+    pfcf = stock_price/fcf_per_share
+    return round(pfcf, 2)
