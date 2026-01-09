@@ -2,6 +2,7 @@ import os
 from dotenv import find_dotenv, load_dotenv
 import requests
 from flask import session
+from datetime import datetime, timedelta
 
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
@@ -10,8 +11,11 @@ TWELVEDATA_API_KEY = os.getenv("TWELVEDATA_API_KEY") # use this to get the stock
 
 
 def call_api(url: str) -> dict:
-    response = requests.get(url).json()
-    return response
+    response = requests.get(url)
+    if response.status_code == 429:
+        raise Exception("We are currently at the API calling limit")
+    else:
+        return response.json()
 
 
 def verify_stock_ticker_exists(ticker: str) -> bool:
@@ -30,7 +34,7 @@ def verify_stock_ticker_exists(ticker: str) -> bool:
         return False
 
 
-def get_day_at_date(date: str): # date in YYYY-MM-DD use Zellers formula
+def get_day_at_date(date: str) -> int:  # date in YYYY/MM/DD use Zellers formula
     if date[8] == 0:
         day_of_month = int(date[9])
     else:
@@ -49,39 +53,57 @@ def get_day_at_date(date: str): # date in YYYY-MM-DD use Zellers formula
     else:
         month = int(date[5:7])
 
-    year_of_century = year % 100 # this gets the remainder of dividing by 100 i.e. the year of the century
-    century = year // 100 # this isn't the current century, instead it is the number of centuries since the year 1 AD
+    year_of_century = year % 100  # this gets the remainder of dividing by 100 i.e. the year of the century
+    century = year // 100  # this isn't the current century, instead it is the number of centuries since the year 1 AD
+    day_code = (day_of_month + ((13 * (month + 1)) // 5) + year_of_century + (year_of_century // 4) + (century // 4) - 2 * century) % 7  # This is Zellers formula where 0 means Saturday and 6 means Friday
 
-    day_code = (day_of_month + ((13*(month+1))//5) + year_of_century + (year_of_century//4) + (century//4) - 2*century) % 7 # This is Zellers formula where 0 means Saturday and 6 means friday
     return day_code
 
-def get_price_at_date(ticker: str, date: str) -> float: # date in YYYY-MM-DD
-    response = call_api(f"https://api.twelvedata.com/eod?symbol={ticker}&apikey={TWELVEDATA_API_KEY}&date={date}")
-    print(response)
-    return response["close"]
 
-def get_financial_statements(ticker: str) -> dict[str, list[dict]]:
-    financial_statements = dict()
+def get_price_at_date(ticker: str, date: str) -> float: # date in YYYY-MM-DD
+    iterations = 0
+    while True:
+        new_date = datetime.strptime(date, "%Y-%m-%d") - timedelta(days=iterations)
+        new_date = new_date.strftime("%Y-%m-%d")
+        weekday = get_day_at_date(new_date)
+        if weekday != 0 and weekday != 1:
+            response = call_api(f"https://api.twelvedata.com/eod?symbol={ticker}&apikey={TWELVEDATA_API_KEY}&date={new_date}")
+            if response.get("code") != 400:
+                break
+        iterations += 1
+    closing_price = float(response["close"])
+    return round(closing_price, 2)
+
+def get_finances(ticker: str) -> dict[str, list[dict]]:
+    finances = dict()
 
     quarterly_income_statements = call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4")
     quarterly_balance_sheets = call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4")
     quarterly_cashflow_statements = call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4")
-    financial_statements["quarterly_income_statements"] = quarterly_income_statements
-    financial_statements["quarterly_balance_sheets"] = quarterly_balance_sheets
-    financial_statements["quarterly_cashflow_statements"] = quarterly_cashflow_statements
+    finances["quarterly_income_statements"] = quarterly_income_statements
+    finances["quarterly_balance_sheets"] = quarterly_balance_sheets
+    finances["quarterly_cashflow_statements"] = quarterly_cashflow_statements
+    finances["q1_price"] = get_price_at_date(ticker, quarterly_income_statements[0]["date"])
+    finances["q2_price"] = get_price_at_date(ticker, quarterly_income_statements[1]["date"])
+    finances["q3_price"] = get_price_at_date(ticker, quarterly_income_statements[2]["date"])
+    finances["q4_price"] = get_price_at_date(ticker, quarterly_income_statements[3]["date"])
 
-    annual_income_statements = call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=5")
-    annual_balance_sheets = call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=5")
-    annual_cashflow_statements = call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=5")
-    financial_statements["annual_income_statements"] = annual_income_statements
-    financial_statements["annual_balance_sheets"] = annual_balance_sheets
-    financial_statements["annual_cashflow_statements"] = annual_cashflow_statements
+    annual_income_statements = call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4")
+    annual_balance_sheets = call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4")
+    annual_cashflow_statements = call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4")
+    finances["annual_income_statements"] = annual_income_statements
+    finances["annual_balance_sheets"] = annual_balance_sheets
+    finances["annual_cashflow_statements"] = annual_cashflow_statements
+    finances["y4_price"] = get_price_at_date(ticker, annual_income_statements[0]["date"]) # y4 is most recent and y1 is least recent like with quarters
+    finances["y3_price"] = get_price_at_date(ticker, annual_income_statements[1]["date"])
+    finances["y2_price"] = get_price_at_date(ticker, annual_income_statements[2]["date"])
+    finances["y1_price"] = get_price_at_date(ticker, annual_income_statements[3]["date"])
 
-    return financial_statements
+    return finances
 
 
-def serialize_financial_statements_for_caching(statements: dict[str, list[dict]]) -> dict[str, str]:
+def serialize_finances_for_caching(finances: dict[str, list[dict]]) -> dict[str, str]:
     serialized_statements = dict()
-    for key in statements:
-        serialized_statements[key] = str(statements[key])
+    for key in finances:
+        serialized_statements[key] = str(finances[key])
     return serialized_statements

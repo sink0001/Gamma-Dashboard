@@ -12,7 +12,7 @@ def cache_searched_stocks_data(ticker: str, session_id: str, heartbeat_interval:
     '''
     stock = Stock(ticker, True)
     cache_handler = Cache_handler()
-    serialized_data = stock.serialize_financial_statements_for_caching(stock.get_financial_statements())
+    serialized_data = stock.serialize_finances_for_caching(stock.get_finances())
     cache_handler.cache(session_id, serialized_data, heartbeat_interval)
     print(cache_handler.get_key_value(session_id))
 
@@ -39,7 +39,7 @@ def home_page():
 @views.route("/stock-analysis", methods=["GET", "POST"])
 def analysis_page():
     if request.method == "GET": # this can only happen if the ticker exists
-        return render_template("stock-analysis.html")
+        return render_template("stock-analysis.html") # give all the values
     else:
         '''
         if the ticker exists get and cache the financial statements and stuff
@@ -47,11 +47,11 @@ def analysis_page():
         '''
         ticker = request.form.get("searched")
         if not ticker:
-            flash("Please Enter a ticker")
-            return render_template("stock-analysis.html")
+            flash("Please enter a ticker")
+            return redirect(url_for("views.home_page"))
         try:
             cache_searched_stocks_data(ticker, session["session_id"], 60)
             return redirect(url_for("views.analysis_page"))
         except Exception as e:
             flash(e.args[0])
-            return render_template("base.html")
+            return redirect(url_for("views.home_page"))

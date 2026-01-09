@@ -2,7 +2,7 @@ from frontend import create_app
 import uuid
 from flask import session
 import redis
-
+# TODO: once back on main branch make api calls async
 
 app = create_app()
 
