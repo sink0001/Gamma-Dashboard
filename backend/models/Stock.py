@@ -33,6 +33,7 @@ class Stock:
         return finances # type: ignore
     
     def get_ratio(self, ratio: str, income_statement: dict, balance_sheet: dict, cashflow_statement: dict, stock_price: float) -> float:
+        # 15 ratios
         match ratio:
             case "pe":
                 return stock_ratios.price_to_earnings(income_statement, stock_price)
@@ -62,6 +63,8 @@ class Stock:
                 return stock_ratios.operating_margin(income_statement)
             case "pfcf":
                 return stock_ratios.price_to_free_cashflow(income_statement, cashflow_statement, stock_price)
+            case "cashflow_to_debt":
+                return stock_ratios.cashflow_to_debt(balance_sheet, cashflow_statement)
             case _:
                 raise Exception("error in ratio request")
     

@@ -104,3 +104,10 @@ def price_to_free_cashflow(income_statement: dict, cashflow_statement: dict, sto
     fcf_per_share = fcf/weighted_average_shares_outstanding
     pfcf = stock_price/fcf_per_share
     return round(pfcf, 2)
+
+
+def cashflow_to_debt(balance_sheet: dict, cashflow_statement: dict) -> float:
+    operating_cash_flow = cashflow_statement["operatingCashFlow"]
+    total_debt = balance_sheet["totalDebt"]
+    cashflow_to_debt = (operating_cash_flow/total_debt)*100
+    return round(cashflow_to_debt, 2)
