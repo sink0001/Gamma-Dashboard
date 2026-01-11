@@ -23,8 +23,8 @@ class Stock:
     
     def set_finances(self, finances: dict[str, list[dict]]) -> None:
         self.finances = finances
-        self.quarterly_income_statements, self.quarterly_balance_sheets, self.quarterly_cashflow_statements = finances["quarterly_income_statements"], finances["quarterly_balance_sheets"], finances["quarterly_cashflow_statements"]
         self.annual_income_statements, self.annual_balance_sheets, self.annual_cashflow_statements = finances["annual_income_statements"], finances["annual_balance_sheets"], finances["annual_cashflow_statements"]
+        self.quarterly_income_statements, self.quarterly_balance_sheets, self.quarterly_cashflow_statements = finances["quarterly_income_statements"], finances["quarterly_balance_sheets"], finances["quarterly_cashflow_statements"]
 
     def deserialize_cached_finances(self, finances: dict[str, str]) -> dict[str, list[dict]]:
         for key in finances:
