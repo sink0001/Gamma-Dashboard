@@ -4,6 +4,8 @@ from flask import session
 from datetime import datetime, timedelta
 from asyncio import gather, run
 from aiohttp import ClientSession
+from requests import get
+
 
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
@@ -19,9 +21,17 @@ async def call_api(url: str) -> dict:
             else:
                 return await response.json()
 
-async def verify_stock_ticker_exists(ticker: str) -> bool:
+def synchronous_call_api(url: str) -> dict:
+    response = get(url)
+    if response.status_code == 429:
+        raise Exception("We are currently at the API calling limit")
+    else:
+        return response.json()
+
+
+def verify_stock_ticker_exists(ticker: str) -> bool:
     try:
-        response = await call_api(f"https://financialmodelingprep.com/stable/search-symbol?query={ticker}&apikey={FMP_API_KEY}")
+        response = synchronous_call_api(f"https://financialmodelingprep.com/stable/search-symbol?query={ticker}&apikey={FMP_API_KEY}")
         if response:
             session["current_stock_ticker"] = response[0]["symbol"]
             session["current_stock_name"] = response[0]["name"]

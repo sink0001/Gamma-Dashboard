@@ -14,8 +14,8 @@ class Stock:
                 raise Exception(f"Sorry, we don't know the ticker {ticker}")
         self.ticker = ticker
 
-    def get_finances(self):
-        financial_statements = stock_services.get_finances(self.ticker)
+    async def get_finances(self):
+        financial_statements = await stock_services.get_finances(self.ticker)
         return financial_statements
 
     def serialize_finances_for_caching(self, finances: dict[str, list[dict]]) -> dict[str, str]:

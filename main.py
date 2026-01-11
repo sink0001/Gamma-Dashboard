@@ -1,8 +1,8 @@
 from frontend import create_app
-import uuid
+from uuid import uuid4
 from flask import session
 import redis
-# TODO: once back on main branch make api calls async
+
 
 app = create_app()
 
@@ -10,7 +10,7 @@ app = create_app()
 @app.before_request
 def before_request():
     if "session_id" not in session:
-        session["session_id"] = str(uuid.uuid4())
+        session["session_id"] = str(uuid4())
 
 
 if __name__ == "__main__":

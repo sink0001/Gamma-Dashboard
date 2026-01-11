@@ -5,20 +5,23 @@ from backend.models.Cache_handler import Cache_handler
 views = Blueprint("views", __name__)
 
 
-def cache_searched_stocks_data(ticker: str, session_id: str, heartbeat_interval: int) -> None:
+async def cache_searched_stocks_data(ticker: str, session_id: str, heartbeat_interval: int) -> None:
     '''
     caches a stock by caching with the session_id as the key
     and the financial statements of the key as values
     '''
     stock = Stock(ticker, True)
     cache_handler = Cache_handler()
-    serialized_data = stock.serialize_finances_for_caching(stock.get_finances())
+
+    finances = await stock.get_finances()
+    serialized_data = stock.serialize_finances_for_caching(finances)
     cache_handler.cache(session_id, serialized_data, heartbeat_interval)
     print(cache_handler.get_key_value(session_id))
+    print(finances)
 
 
 @views.route("/", methods=["GET", "POST"])
-def home_page():
+async def home_page():
     if request.method == "GET":
         return render_template("base.html")
     else:
@@ -29,7 +32,7 @@ def home_page():
             return render_template("base.html")
         try:
             stock = Stock(ticker, False)
-            cache_searched_stocks_data(ticker, session["session_id"], 60)
+            await cache_searched_stocks_data(ticker, session["session_id"], 60)
             return redirect(url_for("views.analysis_page"))
         except Exception as e:
             flash(e.args[0])
@@ -37,7 +40,7 @@ def home_page():
 
 
 @views.route("/stock-analysis", methods=["GET", "POST"])
-def analysis_page():
+async def analysis_page():
     if request.method == "GET": # this can only happen if the ticker exists
         return render_template("stock-analysis.html") # give all the values
     else:
@@ -50,7 +53,7 @@ def analysis_page():
             flash("Please enter a ticker")
             return redirect(url_for("views.home_page"))
         try:
-            cache_searched_stocks_data(ticker, session["session_id"], 60)
+            await cache_searched_stocks_data(ticker, session["session_id"], 60)
             return redirect(url_for("views.analysis_page"))
         except Exception as e:
             flash(e.args[0])
