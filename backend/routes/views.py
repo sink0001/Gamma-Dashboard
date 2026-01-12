@@ -41,7 +41,7 @@ async def home_page():
 async def analysis_page(stock_name):
     if request.method == "GET": # this can only happen if the ticker exists
         print(stock_name)
-        return render_template("stock-analysis.html")
+        return render_template("stock-analysis.html", pe_ratio=20)
     else:
         '''
         if the ticker exists get and cache the financial statements and stuff

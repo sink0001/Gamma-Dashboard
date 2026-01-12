@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial scale=1">
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <title>{% block title %}Home{% endblock %}</title>
+        {% block head_content %}{% endblock %}
     </head>
     <body>
         <div class="navbar-container">

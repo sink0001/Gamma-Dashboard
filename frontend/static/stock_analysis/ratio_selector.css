@@ -1,0 +1,25 @@
+
+.ratio-selector {
+    display: flex;
+}
+
+
+.column {
+    display: flex;
+    flex-direction: column;
+    padding: 2em 1.5em
+}
+
+
+.ratio-button {
+    margin: 1rem 0;
+    border: none;
+    background-color: white;
+    border-radius: 5px;
+    padding: 0.5em 1em;
+    font-weight: bold;
+    color: #9b9b9b;
+}
+.ratio-button:hover {
+    color: rgb(68, 192, 233)
+}
