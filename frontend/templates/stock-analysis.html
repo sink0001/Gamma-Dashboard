@@ -3,35 +3,42 @@
 
 {% block head_content %}
     <link rel="stylesheet" href="{{ url_for('static', filename='stock_analysis/ratio_selector.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='graphing/graph.css')}}">
 {% endblock %}
 {% block content %}
-    <div class="ratio-selector">
-        <div class="column">
-            <button class="ratio-button">P/E ratio</button>
-            <button class="ratio-button">Debt to equity</button>
-            <button class="ratio-button">FCF margin</button>
+    <div class="ratio-content">
+        <div class="ratio-selector">
+            <div class="column">
+                <button class="ratio-button">P/E ratio</button>
+                <button class="ratio-button">Debt to equity</button>
+                <button class="ratio-button">FCF margin</button>
+            </div>
+            <div class="column">
+                <button class="ratio-button">P/B ratio</button>
+                <button class="ratio-button">Current ratio</button>
+                <button class="ratio-button">Gross margin</button>
+            </div>
+            <div class="column">
+                <button class="ratio-button">Dividend yield</button>
+                <button class="ratio-button">Quick ratio</button>
+                <button class="ratio-button">Operating margin</button>
+            </div>
+            <div class="column">
+                <button class="ratio-button">P/S ratio</button>
+                <button class="ratio-button">EBITDA margin</button>
+                <button class="ratio-button">P/FCF</button>
+            </div>
+            <div class="column">
+                <button class="ratio-button">ROE</button>
+                <button class="ratio-button">ROA</button>
+                <button class="ratio-button">Cashflow to debt</button>
+            </div>
         </div>
-        <div class="column">
-            <button class="ratio-button">P/B ratio</button>
-            <button class="ratio-button">Current ratio</button>
-            <button class="ratio-button">Gross margin</button>
-        </div>
-        <div class="column">
-            <button class="ratio-button">Dividend yield</button>
-            <button class="ratio-button">Quick ratio</button>
-            <button class="ratio-button">Operating margin</button>
-        </div>
-        <div class="column">
-            <button class="ratio-button">P/S ratio</button>
-            <button class="ratio-button">EBITDA margin</button>
-            <button class="ratio-button">P/FCF</button>
-        </div>
-        <div class="column">
-            <button class="ratio-button">ROE</button>
-            <button class="ratio-button">ROA</button>
-            <button class="ratio-button">Cashflow to debt</button>
+        <div class="graph-container">
+            <canvas id="chart" style="display: none;"></canvas>
         </div>
     </div>
-
-    <script src="{{ url_for('static', filename='stock_analysis/ratio_selector.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="{{ url_for('static', filename='graphing/graphing.js') }}"></script>
+    <script type="module" src="{{ url_for('static', filename='stock_analysis/ratios.js') }}"></script>
 {% endblock %}

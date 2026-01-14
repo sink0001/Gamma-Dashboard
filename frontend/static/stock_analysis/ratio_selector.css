@@ -1,14 +1,21 @@
+.ratio-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 10vh;
+}
+
 
 .ratio-selector {
     display: flex;
-    margin: 25vh 0 0 10vw
+    margin: 25vh 0 0 5vw;
 }
 
 
 .column {
     display: flex;
     flex-direction: column;
-    padding: 2em 1.5em
+    padding: 2em 1.5em;
 }
 
 
