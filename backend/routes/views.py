@@ -28,32 +28,25 @@ async def home_page():
         if not ticker:
             flash("Please Enter a ticker")
             return render_template("base.html")
-        try:
-            stock = Stock(ticker, False)
-            await cache_searched_stocks_data(ticker, session["session_id"], 60)
+        else:
             return redirect(url_for("views.analysis_page", stock_name=ticker))
-        except Exception as e:
-            flash(e.args[0])
-            return render_template("base.html")
 
 
 @views.route("/stock-analysis/<stock_name>", methods=["GET", "POST"])
 async def analysis_page(stock_name):
-    if request.method == "GET": # this can only happen if the ticker exists
-        print(stock_name)
-        return render_template("stock-analysis.html", pe_ratio=20)
+    if request.method == "GET": # verify if ticker exists
+        print(session)
+        try:
+            stock = Stock(stock_name, False)
+            await cache_searched_stocks_data(stock_name, session["session_id"], 60)
+            return render_template("stock_analysis.html")
+        except Exception as e:
+            flash(e.args[0])
+            return redirect(url_for("views.home_page"))
     else:
-        '''
-        if the ticker exists get and cache the financial statements and stuff
-        so then the Stock object can calculate all the ratios by accessing cache
-        '''
         ticker = request.form.get("searched")
         if not ticker:
             flash("Please enter a ticker")
             return redirect(url_for("views.home_page"))
-        try:
-            await cache_searched_stocks_data(ticker, session["session_id"], 60)
+        else:
             return redirect(url_for("views.analysis_page", stock_name=ticker))
-        except Exception as e:
-            flash(e.args[0])
-            return redirect(url_for("views.home_page"))
