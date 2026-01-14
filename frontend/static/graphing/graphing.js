@@ -29,6 +29,14 @@ export function graph_ratio(ratio, chart) {
                     tooltip: {
                         displayColors: false
                     }
+                },
+                scales: {
+                    x: {
+                        grid: {display:false}
+                    },
+                    y: {
+                        grid: {display:false}
+                    }
                 }
             }
         });
