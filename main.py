@@ -1,7 +1,6 @@
 from frontend import create_app
 from uuid import uuid4
 from flask import session
-import redis
 
 
 app = create_app()

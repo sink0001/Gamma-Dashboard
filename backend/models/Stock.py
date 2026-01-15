@@ -72,19 +72,19 @@ class Stock:
         quarter = self.quarterly_income_statements[0]["period"] # type: ignore
         return int(quarter[1]) # because quarter will be Q1 or Q2 etc so quarter[1] is the number
     
-    def get_price_at_quarter(self, quarter: int) -> float:
-        return self.finances[f"q{quarter}_price"] # type: ignore
+    def get_price_at_quarter_recency(self, quarter_recency: int) -> float:
+        return self.finances[f"q{quarter_recency}_price"] # type: ignore
     
-    def quarterly_ratio(self, ratio: str, quarter: int) -> float: # some ratios like p/e ratio or p/s ratio are higher in singled out quarters because earnings are lower in a single quarter than in a year
-        quarters_index = 4-quarter
-        stock_price = self.get_price_at_quarter(quarter)
+    def quarterly_ratio(self, ratio: str, quarter_recency: int) -> float: # 4 is the most recent quarter while 1 is the least that we have
+        quarters_index = 4-quarter_recency
+        stock_price = self.get_price_at_quarter_recency(quarter_recency)
         income_statement, balance_sheet, cashflow_statement = self.quarterly_income_statements[quarters_index], self.quarterly_balance_sheets[quarters_index], self.quarterly_cashflow_statements[quarters_index]
         return self.get_ratio(ratio, income_statement, balance_sheet, cashflow_statement, stock_price) # type: ignore
             
     def get_latest_annum(self) -> int:
         return int(self.annual_income_statements[0]["fiscalYear"]) # type: ignore
     
-    def get_price_at_annum(self, annum: int) -> float:
+    def get_price_at_annum(self, annum: int) -> float: # annum has to be a value from 1-4 with 4 being most recent
         return self.finances[f"y{annum}_price"] # type: ignore
     
     def annual_ratio(self, ratio: str, year: int):

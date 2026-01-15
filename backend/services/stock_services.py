@@ -96,7 +96,7 @@ async def get_finances(ticker: str) -> dict[str, list[dict]]:
      finances["y3_price"],
      finances["y2_price"],
      finances["y1_price"],
-     finances["q4_price"],
+     finances["q4_price"], # the quarter value here is not the actual quarter but rather the quarter recency out of the last 4 so 4 being the most recent and 1 being the least recent out of the 4 we have
      finances["q3_price"],
      finances["q2_price"],
      finances["q1_price"],
