@@ -4,7 +4,7 @@ from backend.models.Stock import Stock
 from flask import jsonify
 
 
-stock_data = Blueprint("stock_data", __name__) # url_prefix="stock/" so all endpoints have to have stock/ infront
+stock_data = Blueprint("stock_data", __name__) # url_prefix="/stock_data/" so all endpoints have to have stock_data/ infront
 
 
 def get_last_4_quarters(current_quarter: int) -> list:
