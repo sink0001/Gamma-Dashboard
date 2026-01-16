@@ -66,7 +66,7 @@ class Stock:
             case "cashflow_to_debt":
                 return stock_ratios.cashflow_to_debt(balance_sheet, cashflow_statement)
             case _:
-                raise Exception("error in ratio request")
+                raise Exception("Sorry, we don't know that ratio")
     
     def get_latest_quarter(self) -> int:
         quarter = self.quarterly_income_statements[0]["period"] # type: ignore

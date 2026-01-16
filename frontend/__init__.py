@@ -12,6 +12,6 @@ def create_app():
 
     app.register_blueprint(views)
     app.register_blueprint(heart_beat_listener)
-    app.register_blueprint(stock_data, url_prefix="stock/")
+    app.register_blueprint(stock_data, url_prefix="/stock_data/")
     
     return app
