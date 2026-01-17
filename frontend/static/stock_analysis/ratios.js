@@ -3,13 +3,18 @@ import { graph_ratio } from "../graphing/graphing.js"
 
 window.addEventListener("load", () => {
     console.log("triggered")
-    button = document.querySelector("#pe")
-    button.click()
+    const button = document.querySelector("#pe")
+    if (button) {
+        button.click()
+    }
+    else {
+        console.log("pe button not found")
+    }
+    
 })
 
 
 const ratio_selection_buttons = document.querySelectorAll(".ratio-button")
-console.log(ratio_selection_buttons)
 
 function button_event_listener(event) {
     for (const button of ratio_selection_buttons) {
