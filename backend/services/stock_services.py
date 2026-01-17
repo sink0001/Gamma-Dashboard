@@ -16,10 +16,13 @@ TWELVEDATA_API_KEY = os.getenv("TWELVEDATA_API_KEY") # use this to get the stock
 async def call_api(url: str) -> dict:
     async with ClientSession() as session:
         async with session.get(url) as response:
+            json_response = await response.json()
             if response.status == 429:
                 raise Exception("We are currently at the API calling limit")
+            elif "twelvedata" in url.lower() and json_response.get("code") == 429:
+                raise Exception("We are currently at the API calling limit, try waiting 1 minute")
             else:
-                return await response.json()
+                return json_response
 
 def synchronous_call_api(url: str) -> dict:
     response = get(url)

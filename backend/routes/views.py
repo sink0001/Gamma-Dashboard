@@ -35,7 +35,6 @@ async def home_page():
 @views.route("/stock-analysis/<stock_name>", methods=["GET", "POST"])
 async def analysis_page(stock_name):
     if request.method == "GET": # verify if ticker exists
-        print(session)
         try:
             stock = Stock(stock_name, False)
             await cache_searched_stocks_data(stock_name, session["session_id"], 60)

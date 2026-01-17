@@ -1,5 +1,3 @@
-
-
 export function graph_ratio(ratio, chart) {
     // dummy x and y values for now
     new Chart(chart, {
@@ -41,4 +39,3 @@ export function graph_ratio(ratio, chart) {
             }
         });
 }
-
