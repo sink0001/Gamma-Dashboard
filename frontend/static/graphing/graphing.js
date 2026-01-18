@@ -1,4 +1,4 @@
-export function graph_ratio(ratio, chart) {
+export function graph_ratio(ratio, period, chart) {
     // dummy x and y values for now
     new Chart(chart, {
             type: 'line', // Type of chart

@@ -34,8 +34,14 @@
                 <button class="ratio-button" id="cashflow_to_debt">Cashflow to debt</button>
             </div>
         </div>
-        <div class="graph-container">
-            <canvas id="chart" style="display: none;"></canvas>
+        <div class="graph-area">
+            <div class="period-toggle">
+                <button class="period-button" id="annual">Annual</button>
+                <button class="period-button" id="quarterly">Quarterly</button>
+            </div>
+            <div class="graph-container">
+                <canvas id="chart" style="display: none;"></canvas>
+            </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
