@@ -2,7 +2,6 @@ import { graph_ratio } from "../graphing/graphing.js"
 
 
 window.addEventListener("load", () => {
-    console.log("triggered")
     const button = document.querySelector("#pe")
     button.click()
 })
@@ -12,6 +11,7 @@ let current_ratio_button = document.querySelector("#pe")
 let period = "annual"
 const annual_toggle = document.querySelector("#annual")
 const quarterly_toggle = document.querySelector("#quarterly")
+var graph = null
 
 
 function ratio_button_event_listener(event) {
@@ -21,7 +21,7 @@ function ratio_button_event_listener(event) {
     const button = event.target
     button.style.color = "rgb(68, 192, 233)"
 
-    current_ratio_button = button.id
+    current_ratio_button = button
     annual_toggle.click()
 }
 
@@ -30,7 +30,7 @@ for (let i = 0; i < ratio_selection_buttons.length; i++) {
 }
 
 
-function period_toggle_event_listener(event) {
+async function period_toggle_event_listener(event) {
     const button = event.target
     period = button.id
     annual_toggle.style.color = null
@@ -40,7 +40,11 @@ function period_toggle_event_listener(event) {
     const chart = document.querySelector("#chart")
     chart.style.display = "block"
     const ratio = current_ratio_button.id
-    graph_ratio(ratio, period, chart)
+
+    if (graph) {
+        graph.destroy()
+    }
+    graph = await graph_ratio(ratio, period, chart)
 }
 annual_toggle.addEventListener("click", period_toggle_event_listener)
 quarterly_toggle.addEventListener("click", period_toggle_event_listener)
