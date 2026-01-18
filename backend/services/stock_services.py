@@ -2,8 +2,7 @@ import os
 from dotenv import find_dotenv, load_dotenv
 from flask import session
 from datetime import datetime, timedelta
-from asyncio import gather, run
-from aiohttp import ClientSession
+from asyncio import gather
 from requests import get
 
 
@@ -13,16 +12,15 @@ FMP_API_KEY = os.getenv("FMP_API_KEY")
 TWELVEDATA_API_KEY = os.getenv("TWELVEDATA_API_KEY") # use this to get the stocks prices
 
 
-async def call_api(url: str) -> dict:
-    async with ClientSession() as session:
-        async with session.get(url) as response:
-            json_response = await response.json()
-            if response.status == 429:
-                raise Exception("We are currently at the API calling limit")
-            elif "twelvedata" in url.lower() and json_response.get("code") == 429:
-                raise Exception("We are currently at the API calling limit, try waiting 1 minute")
-            else:
-                return json_response
+async def call_api(url: str, aiohttp_session) -> dict:
+    async with aiohttp_session.get(url) as response:
+        json_response = await response.json()
+        if response.status == 429:
+            raise Exception("We are currently at the API calling limit")
+        elif "twelvedata" in url.lower() and json_response.get("code") == 429:
+            raise Exception("We are currently at the API calling limit, try waiting 1 minute")
+        else:
+            return json_response
 
 def synchronous_call_api(url: str) -> dict:
     response = get(url)
@@ -74,25 +72,26 @@ def get_day_at_date(date: str) -> int:  # date in YYYY/MM/DD use Zellers formula
     return day_code
 
 
-async def get_price_at_date(ticker: str, date: str) -> float: # date in YYYY-MM-DD
+async def get_price_at_date(ticker: str, date: str, aiohttp_session) -> float: # date in YYYY-MM-DD
     iterations = 0
     while True:
         new_date = datetime.strptime(date, "%Y-%m-%d") - timedelta(days=iterations)
         new_date = new_date.strftime("%Y-%m-%d")
         weekday = get_day_at_date(new_date)
         if weekday != 0 and weekday != 1:
-            response = await call_api(f"https://api.twelvedata.com/eod?symbol={ticker}&apikey={TWELVEDATA_API_KEY}&date={new_date}")
+            response = await call_api(f"https://api.twelvedata.com/eod?symbol={ticker}&apikey={TWELVEDATA_API_KEY}&date={new_date}", aiohttp_session)
             if response.get("code") != 400:
                 break
         iterations += 1
     closing_price = float(response["close"])
     return round(closing_price, 2)
 
-async def get_finances(ticker: str) -> dict[str, list[dict]]:
+async def get_finances(ticker: str, aiohttp_session) -> dict[str, list[dict]]:
     finances = {}
-    (finances["annual_income_statements"], finances["quarterly_income_statements"]) = await gather(call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4"),
-                                                                                                   call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4"),
-                                                                                                   )
+    (finances["annual_income_statements"],
+     finances["quarterly_income_statements"]) = await gather(call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4", aiohttp_session),
+                                                             call_api(f"https://financialmodelingprep.com/stable/income-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4", aiohttp_session),
+                                                             )
     annual_income_statements = finances["annual_income_statements"]
     quarterly_income_statements = finances["quarterly_income_statements"]
     (finances["y4_price"], # y4 is most recent and y1 is least recent like with quarters
@@ -107,18 +106,18 @@ async def get_finances(ticker: str) -> dict[str, list[dict]]:
      finances["annual_cashflow_statements"],
      finances["quarterly_balance_sheets"],
      finances["quarterly_cashflow_statements"]
-     ) = await gather(get_price_at_date(ticker, annual_income_statements[0]["date"]),
-                      get_price_at_date(ticker, annual_income_statements[1]["date"]),
-                      get_price_at_date(ticker, annual_income_statements[2]["date"]),
-                      get_price_at_date(ticker, annual_income_statements[3]["date"]),
-                      get_price_at_date(ticker, quarterly_income_statements[0]["date"]),
-                      get_price_at_date(ticker, quarterly_income_statements[1]["date"]),
-                      get_price_at_date(ticker, quarterly_income_statements[2]["date"]),
-                      get_price_at_date(ticker, quarterly_income_statements[3]["date"]),
-                      call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4"),
-                      call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4"),
-                      call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4"),
-                      call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4"))
+     ) = await gather(get_price_at_date(ticker, annual_income_statements[0]["date"], aiohttp_session),
+                      get_price_at_date(ticker, annual_income_statements[1]["date"], aiohttp_session),
+                      get_price_at_date(ticker, annual_income_statements[2]["date"], aiohttp_session),
+                      get_price_at_date(ticker, annual_income_statements[3]["date"], aiohttp_session),
+                      get_price_at_date(ticker, quarterly_income_statements[0]["date"], aiohttp_session),
+                      get_price_at_date(ticker, quarterly_income_statements[1]["date"], aiohttp_session),
+                      get_price_at_date(ticker, quarterly_income_statements[2]["date"], aiohttp_session),
+                      get_price_at_date(ticker, quarterly_income_statements[3]["date"], aiohttp_session),
+                      call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4", aiohttp_session),
+                      call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=annual&limit=4", aiohttp_session),
+                      call_api(f"https://financialmodelingprep.com/stable/balance-sheet-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4", aiohttp_session),
+                      call_api(f"https://financialmodelingprep.com/stable/cash-flow-statement?symbol={ticker}&apikey={FMP_API_KEY}&period=quarter&limit=4", aiohttp_session))
     return finances
 
 

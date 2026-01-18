@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from backend.models.Stock import Stock
 from backend.models.Cache_handler import Cache_handler
+from aiohttp import ClientSession
+
 
 views = Blueprint("views", __name__)
 
@@ -12,11 +14,12 @@ async def cache_searched_stocks_data(ticker: str, session_id: str, heartbeat_int
     '''
     stock = Stock(ticker, True)
     cache_handler = Cache_handler()
-
-    finances = await stock.get_finances()
+    
+    async with ClientSession() as session:
+        finances = await stock.get_finances(session)
     serialized_data = stock.serialize_finances_for_caching(finances)
     cache_handler.cache(session_id, serialized_data, heartbeat_interval)
-
+    print(cache_handler.get_key_value(session_id))
 
 @views.route("/", methods=["GET", "POST"])
 async def home_page():
