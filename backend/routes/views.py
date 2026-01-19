@@ -19,7 +19,7 @@ async def cache_searched_stocks_data(ticker: str, session_id: str, heartbeat_int
         finances = await stock.get_finances(session)
     serialized_data = stock.serialize_finances_for_caching(finances)
     cache_handler.cache(session_id, serialized_data, heartbeat_interval)
-    print(cache_handler.get_key_value(session_id))
+
 
 @views.route("/", methods=["GET", "POST"])
 async def home_page():

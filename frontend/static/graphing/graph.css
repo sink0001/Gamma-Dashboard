@@ -16,6 +16,9 @@
     font-weight: bold;
     color: #9b9b9b;
 }
+.period-button:hover {
+    color: rgb(68, 192, 233)
+}
 
 
 #chart {

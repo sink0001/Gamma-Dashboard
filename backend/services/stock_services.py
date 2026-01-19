@@ -31,19 +31,16 @@ def synchronous_call_api(url: str) -> dict:
 
 
 def verify_stock_ticker_exists(ticker: str) -> bool:
-    try:
-        response = synchronous_call_api(f"https://financialmodelingprep.com/stable/search-symbol?query={ticker}&apikey={FMP_API_KEY}")
-        if response:
-            session["current_stock_ticker"] = response[0]["symbol"]
-            session["current_stock_name"] = response[0]["name"]
-            session["current_stock_verified"] = True
-            return True
-        else:
-            session["current_stock_verified"] = False
-            return False
-    except Exception as e:
-        print(f"Error: {e}")
+    response = synchronous_call_api(f"https://financialmodelingprep.com/stable/search-symbol?query={ticker}&apikey={FMP_API_KEY}")
+    if response:
+        session["current_stock_ticker"] = response[0]["symbol"]
+        session["current_stock_name"] = response[0]["name"]
+        session["current_stock_verified"] = True
+        return True
+    else:
+        session["current_stock_verified"] = False
         return False
+
 
 
 def get_day_at_date(date: str) -> int:  # date in YYYY/MM/DD use Zellers formula
