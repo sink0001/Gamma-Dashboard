@@ -40,11 +40,12 @@ async function period_toggle_event_listener(event) {
     const chart = document.querySelector("#chart")
     chart.style.display = "block"
     const ratio = current_ratio_button.id
+    const ratio_display_name = current_ratio_button.innerText
 
     if (graph) {
         graph.destroy()
     }
-    graph = await graph_ratio(ratio, period, chart)
+    graph = await graph_ratio(ratio, ratio_display_name, period, chart)
 }
 annual_toggle.addEventListener("click", period_toggle_event_listener)
 quarterly_toggle.addEventListener("click", period_toggle_event_listener)

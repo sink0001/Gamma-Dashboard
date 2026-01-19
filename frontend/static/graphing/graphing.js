@@ -16,7 +16,7 @@ async function get_graph_values(ratio, period) {
 }
 
 
-export async function graph_ratio(ratio, period, chart) {
+export async function graph_ratio(ratio, ratio_display_name, period, chart) {
     const positional_values = await get_graph_values(ratio, period)
     const x_values = positional_values[0]
     const y_values = positional_values[1]
@@ -26,7 +26,7 @@ export async function graph_ratio(ratio, period, chart) {
             data: {
                 labels: x_values,
                 datasets: [{
-                    label: ratio,
+                    label: ratio_display_name,
                     data: y_values,
                     borderColor: 'rgba(90, 214, 255, 1)',
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -43,7 +43,7 @@ export async function graph_ratio(ratio, period, chart) {
                     },
                     title: {
                         display: true,
-                        text: ratio
+                        text: ratio_display_name
                     },
                     tooltip: {
                         displayColors: false
