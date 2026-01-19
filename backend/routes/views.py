@@ -30,7 +30,7 @@ async def home_page():
         ticker = request.form.get("searched").strip() # type: ignore
         if not ticker:
             flash("Please Enter a ticker")
-            return render_template("base.html")
+            return redirect(url_for("views.home_page"))
         else:
             return redirect(url_for("views.analysis_page", stock_name=ticker))
 
