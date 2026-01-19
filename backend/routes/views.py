@@ -41,7 +41,7 @@ async def analysis_page(stock_name):
         try:
             stock = Stock(stock_name, False)
             await cache_searched_stocks_data(stock_name, session["session_id"], 60)
-            return render_template("stock_analysis.html")
+            return render_template("stock_analysis.html", stock_name=session["current_stock_name"])
         except Exception as e:
             flash(e.args[0])
             return redirect(url_for("views.home_page"))

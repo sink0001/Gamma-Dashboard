@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='graphing/graph.css')}}">
 {% endblock %}
 {% block content %}
+    <h1 id="stock-name" style="text-align: center;font-family: sans-serif;">{{ stock_name }}</h1>
     <div class="ratio-content">
         <div class="ratio-selector" onload="press_button('pe')">
             <div class="column">
