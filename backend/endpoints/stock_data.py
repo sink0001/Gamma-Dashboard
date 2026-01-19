@@ -27,7 +27,7 @@ def quarterly_ratio_graph(ratio):
         last_4_quarters = get_last_4_quarters(latest_quarter)
         data["x_values"], data["y_values"] = [], []
         for i in reversed(range(4)):
-            data["x_values"].append(last_4_quarters[i])
+            data["x_values"].append(f"Q{last_4_quarters[i]}")
             data["y_values"].append(stock.quarterly_ratio(ratio=ratio, quarter_recency=(4 - i)))
         return jsonify(success=True, data=data, error=None), 200
     except Exception as e:
