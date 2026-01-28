@@ -5,10 +5,7 @@ signup_form.addEventListener("submit", (event) => {
     event.preventDefault()
     form = event.target
     const form_data = new FormData(form)
-    if (! (form_data.get("email").includes("@"))) {
-        alert("Invalid email format")
-    }
-    else {
-        
+    if (form_data.get("password").length < 4) {
+        alert("Password must be longer than 4 characters")
     }
 })

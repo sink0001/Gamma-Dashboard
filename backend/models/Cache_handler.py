@@ -5,7 +5,7 @@ class Cache_handler:
     def __init__(self):
         self.redis_connection = cache_services.get_redis_connection()
 
-    def cache(self, key: str, to_cache: dict, heartbeat_interval: int) -> None:
+    def cache(self, key: str, to_cache: dict, default_ttl: int) -> None:
         if self.check_key_presence(key):
             time_left_to_live = self.redis_connection.ttl(key)
             self.redis_connection.delete(key)
@@ -13,7 +13,7 @@ class Cache_handler:
             self.redis_connection.expire(key, time_left_to_live) # type: ignore
         else:
             self.redis_connection.hset(key, mapping=to_cache)
-            self.redis_connection.expire(key, heartbeat_interval)
+            self.redis_connection.expire(key, default_ttl)
 
     def check_key_presence(self, key: str) -> bool:
         return True if self.redis_connection.exists(key) else False

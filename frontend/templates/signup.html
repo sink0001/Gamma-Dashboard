@@ -9,11 +9,13 @@
     <body>
         <form id="signup-form" class="auth-form">
             <h1>Sign-up</h1>
-            <input type="text" class="auth-form-input-field" name="email" placeholder="Email">
+            <input type="text" class="auth-form-input-field" name="username" placeholder="Username">
             <input type="text" class="auth-form-input-field" name="password" placeholder="Password">
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACVGLtBfRK0X2Vlk"></div>
             <button type="submit" id="signup-submit">Submit</button>
         </form>
 
         <script src="{{ url_for('static', filename='auth/signup.js') }}"></script>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     </body>
 </html>
