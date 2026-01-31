@@ -4,17 +4,26 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial scale=1">
         <link rel="stylesheet" href="{{ url_for('static', filename='auth/auth.css') }}">
+        <link rel="preconnect" href="https://challenges.cloudflare.com">
         <title>Sign-up</title>
     </head>
     <body>
-        <form id="signup-form" class="auth-form">
+        <form id="signup-form" class="auth-form" method="POST">
             <h1>Sign-up</h1>
             <input type="text" class="auth-form-input-field" name="username" placeholder="Username">
             <input type="text" class="auth-form-input-field" name="password" placeholder="Password">
-            <div class="cf-turnstile" data-sitekey="0x4AAAAAACVGLtBfRK0X2Vlk"></div>
+            <div class="cf-turnstile" data-sitekey="0x4AAAAAACVGLtBfRK0X2Vlk" data-theme="light"></div>
             <button type="submit" id="signup-submit">Submit</button>
         </form>
-
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+            <script>
+                alert({{ message | tojson }});
+            </script>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
         <script src="{{ url_for('static', filename='auth/signup.js') }}"></script>
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
     </body>

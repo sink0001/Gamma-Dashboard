@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from backend.models.Stock import Stock
-from backend.models.Cache_handler import Cache_handler
+from backend.coordinators.Cache_handler import Cache_handler
 from aiohttp import ClientSession
 
 

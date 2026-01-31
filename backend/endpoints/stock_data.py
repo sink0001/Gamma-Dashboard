@@ -1,5 +1,5 @@
 from flask import Blueprint, session
-from backend.models.Cache_handler import Cache_handler
+from backend.coordinators.Cache_handler import Cache_handler
 from backend.models.Stock import Stock
 from flask import jsonify
 
@@ -9,13 +9,12 @@ stock_data = Blueprint("stock_data", __name__) # url_prefix="/stock_data/" so al
 
 def get_last_4_quarters(current_quarter: int) -> list:
     wheel = [4, 3, 2, 1, 4, 3, 2, 1]
-    start = current_quarter
-    start_index = wheel.index(start)
+    start_index = wheel.index(current_quarter)
     return wheel[start_index:(start_index+4)]
 
 
 @stock_data.route("/graph/quarterly_ratio/<ratio>")
-def quarterly_ratio_graph(ratio):
+def quarterly_ratio_graph(ratio: str):
     stock = Stock(session["current_stock_ticker"], True)
     cache_handler = Cache_handler()
     unserialized_finances = cache_handler.get_key_value(session["session_id"])
@@ -35,7 +34,7 @@ def quarterly_ratio_graph(ratio):
 
 
 @stock_data.route("/graph/annual_ratio/<ratio>")
-def annual_ratio_graph(ratio):
+def annual_ratio_graph(ratio: str):
     stock = Stock(session["current_stock_ticker"], True)
     cache_handler = Cache_handler()
     unserialized_finances = cache_handler.get_key_value(session["session_id"])

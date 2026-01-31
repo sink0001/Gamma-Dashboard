@@ -1,5 +1,5 @@
 from flask import Blueprint, session
-from backend.models.Cache_handler import Cache_handler
+from backend.coordinators.Cache_handler import Cache_handler
 
 heart_beat_listener = Blueprint("heart_beat_listener", __name__)
 
