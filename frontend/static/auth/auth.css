@@ -4,10 +4,14 @@ body {
     align-items: center;
 }
 
-
 button {
     font-family: arial;
 }
+
+h1 {
+    font-family: arial;
+}
+
 
 .auth-form {
     display: flex;
