@@ -29,6 +29,7 @@ def signup():
             return redirect(url_for("auth.signup"))
         elif username_length > 255:
             flash("please enter a shorter username")
+            return redirect(url_for("auth.signup"))
         elif password_length < 4:
             flash("password must be longer than 4 characters")
             return redirect(url_for("auth.signup"))
@@ -41,5 +42,11 @@ def signup():
                 flash("a user with that username already exists")
                 return redirect(url_for("auth.signup"))
             return redirect(url_for("views.home_page"))
-        # also check whether username already exists and redirect
-        return "" # placeholder for now
+
+
+@auth.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    else:
+        return ""

@@ -43,7 +43,7 @@ button {
     transition: border-color 0.3s ease;
 }
 
-#signup-submit {
+.auth-submit {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -61,6 +61,6 @@ button {
     cursor: pointer;
     transition: background-color 0.3s;
 }
-#signup-submit:hover {
+.auth-submit:hover {
     background-color: #469fff;
 }
