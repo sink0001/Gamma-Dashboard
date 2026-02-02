@@ -6,5 +6,8 @@ class User_gate:
         response = auth_services.validate_turnstile_token(token)
         return response["success"]
     
-    def signup_user(self, username: str, password: str):
-        auth_services.signup_user(username, password)
+    def signup_user(self, username: str, password: str) -> bool:
+        if not auth_services.username_exists(username):
+            auth_services.create_user(username, password) # this also hashes the unhashed password
+            return True
+        return False

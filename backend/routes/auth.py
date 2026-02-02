@@ -24,7 +24,6 @@ def signup():
         if not token_validity:
             flash("We couldn't verify you are human, maybe try again?")
             return redirect(url_for("auth.signup"))
-        # elif username already exists in db
         elif username_length < 1:
             flash("Enter a username")
             return redirect(url_for("auth.signup"))
@@ -37,7 +36,10 @@ def signup():
             flash("password shorter than 150 characters")
             return redirect(url_for("auth.signup"))
         else:
-            user_gate.signup_user(username, password) # type:ignore
+            success = user_gate.signup_user(username, password) # type:ignore
+            if not success:
+                flash("a user with that username already exists")
+                return redirect(url_for("auth.signup"))
             return redirect(url_for("views.home_page"))
         # also check whether username already exists and redirect
         return "" # placeholder for now

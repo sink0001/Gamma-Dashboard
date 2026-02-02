@@ -25,6 +25,10 @@ def validate_turnstile_token(token: str) -> dict:
         return {'success': False, 'error-codes': ['internal-error']}
 
 
-def signup_user(username: str, password: str) -> None:
+def create_user(username: str, password: str) -> None:
     hashed_password = generate_password_hash(password)
     user_repositories.create_user(username, hashed_password)
+
+
+def username_exists(username: str) -> bool:
+    return user_repositories.username_exists(username)
