@@ -41,3 +41,7 @@ def user_exists(username: str, password: str) -> bool:
 
 def get_username_by_id(id: int) -> str:
     return user_repositories.get_username_by_id(id)
+
+
+def get_id_by_username(username: str) -> int:
+    return user_repositories.get_id_by_username(username)

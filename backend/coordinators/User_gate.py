@@ -16,3 +16,6 @@ class User_gate:
         if not auth_services.username_exists(username):
             return False
         return auth_services.user_exists(username, password)
+    
+    def get_id_by_username(self, username: str) -> int:
+        return auth_services.get_id_by_username(username)
