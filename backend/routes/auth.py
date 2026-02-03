@@ -1,5 +1,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
+from flask_login import login_user
 from backend.coordinators.User_gate import User_gate
+from backend.models.User import User
 
 
 auth = Blueprint("auth", __name__)
@@ -61,6 +63,8 @@ def login():
         token_validity = user_gate.validate_turnstile_token(turnstile_token) # type:ignore
         if check_credential_format(username, password, token_validity): # type:ignore
             if user_gate.user_exists(username, password): # type:ignore
-                # login the user
+                user_id = user_gate.get_id_by_username(username) # type:ignore
+                user = User(user_id, username) # type:ignore
+                login_user(user)
                 return redirect(url_for("views.home_page"))
         return redirect(url_for("auth.login"))
