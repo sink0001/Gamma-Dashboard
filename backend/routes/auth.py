@@ -60,6 +60,7 @@ def login():
         user_gate = User_gate()
         token_validity = user_gate.validate_turnstile_token(turnstile_token) # type:ignore
         if check_credential_format(username, password, token_validity): # type:ignore
-            # check if username and password match with one in the database and if they do login the user
-            pass
+            if user_gate.user_exists(username, password): # type:ignore
+                # login the user
+                return redirect(url_for("views.home_page"))
         return redirect(url_for("auth.login"))

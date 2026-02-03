@@ -1,4 +1,4 @@
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from requests import post, RequestException
 from os import getenv
 from dotenv import find_dotenv, load_dotenv
@@ -32,3 +32,8 @@ def create_user(username: str, password: str) -> None:
 
 def username_exists(username: str) -> bool:
     return user_repositories.username_exists(username)
+
+
+def user_exists(username: str, password: str) -> bool:
+    hashed_password = user_repositories.get_username_password(username)
+    return check_password_hash(hashed_password, password)

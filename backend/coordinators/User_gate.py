@@ -11,3 +11,8 @@ class User_gate:
             auth_services.create_user(username, password) # this also hashes the unhashed password
             return True
         return False
+    
+    def user_exists(self, username: str, password: str) -> bool:
+        if not auth_services.username_exists(username):
+            return False
+        return auth_services.user_exists(username, password)
