@@ -44,8 +44,7 @@ def signup():
                 flash("a user with that username already exists")
                 return redirect(url_for("auth.signup"))
             return redirect(url_for("views.home_page"))
-        else:
-            return redirect(url_for("auth.signup"))
+        return redirect(url_for("auth.signup"))
 
 
 @auth.route("/login", methods=["GET", "POST"])
@@ -53,4 +52,14 @@ def login():
     if request.method == "GET":
         return render_template("login.html")
     else:
-        return ""
+        form = request.form
+        username = form.get("username")
+        password = form.get("password")
+        turnstile_token = form.get("cf-turnstile-response")
+
+        user_gate = User_gate()
+        token_validity = user_gate.validate_turnstile_token(turnstile_token) # type:ignore
+        if check_credential_format(username, password, token_validity): # type:ignore
+            # check if username and password match with one in the database and if they do login the user
+            pass
+        return redirect(url_for("auth.login"))
