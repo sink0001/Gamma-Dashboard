@@ -43,5 +43,5 @@ def get_username_by_id(id: int) -> str | None:
     return user_repositories.get_username_by_id(id)
 
 
-def get_id_by_username(username: str) -> int:
+def get_id_by_username(username: str) -> int | None:
     return user_repositories.get_id_by_username(username)
