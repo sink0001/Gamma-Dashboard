@@ -45,6 +45,9 @@ def signup():
             if not success:
                 flash("a user with that username already exists")
                 return redirect(url_for("auth.signup"))
+            user_id = user_gate.get_id_by_username(username) # type:ignore
+            user = User(user_id, username) # type:ignore
+            login_user(user)
             return redirect(url_for("views.home_page"))
         return redirect(url_for("auth.signup"))
 
