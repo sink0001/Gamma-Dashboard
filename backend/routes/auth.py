@@ -1,5 +1,5 @@
 from flask import Blueprint, request, render_template, redirect, url_for, flash
-from flask_login import login_user
+from flask_login import login_user, logout_user
 from backend.coordinators.User_gate import User_gate
 from backend.models.User import User
 
@@ -72,3 +72,9 @@ def login():
                     login_user(user)
                 return redirect(url_for("views.home_page"))
         return redirect(url_for("auth.login"))
+    
+
+@auth.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("views.home_page"))
