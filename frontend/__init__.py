@@ -12,11 +12,12 @@ from atexit import register
 dotenv_path = find_dotenv()
 load_dotenv(dotenv_path)
 POSTGRES_PASSWORD = getenv("POSTGRES_PASSWORD")
+SECRET_KEY = getenv("FLASK_SECRET_KEY")
 
 
 def create_app():
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = "coolkey123"
+    app.config["SECRET_KEY"] = SECRET_KEY
     app.config["REDIS_HOST"] = "localhost"
     app.config["REDIS_PORT"] = 6379
 
