@@ -10,7 +10,7 @@
     <body>
         <div class="navbar-container">
             <ul id="navbar">
-                <li class="navbar-element"><a class="navbar-link" href="/">Home</a></li>\
+                <li class="navbar-element"><a class="navbar-link" href="/">Home</a></li>
                 <li class="navbar-element"><a class="navbar-link" href="/watchlist">My Watchlist</a></li>
                 <li class="navbar-element"><a class="navbar-link" href="/auth/login">Login</a></li>
                 <li class="navbar-element"><a class="navbar-link" href="/auth/signup">Signup</a></li>
@@ -24,6 +24,11 @@
                 <input class="searchbar" type="search" name="searched" placeholder="Enter a valid stock ticker like AAPL">
             </form>
         </div>
+        {% if current_user.is_authenticated %}
+            <div class="welcome-user">
+                Welcome back, {{ current_user.username }}
+            </div>
+        {% endif %}
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
