@@ -16,13 +16,13 @@ def username_exists(username: str) -> bool:
         return False
  
 
-def get_username_password(username: str) -> str:
+def get_username_password(username: str) -> str | None:
     with current_app.pg_connection_pool.connection() as conn: # type:ignore
         cur = conn.execute("SELECT password FROM users WHERE username = %s", [username])
         result = cur.fetchone()
         if result:
             return result[0]
-        return ""
+        return None
     
 
 def get_username_by_id(id: int) -> str | None:

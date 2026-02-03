@@ -36,6 +36,8 @@ def username_exists(username: str) -> bool:
 
 def user_exists(username: str, password: str) -> bool:
     hashed_password = user_repositories.get_username_password(username)
+    if not hashed_password:
+        return False
     return check_password_hash(hashed_password, password)
 
 
