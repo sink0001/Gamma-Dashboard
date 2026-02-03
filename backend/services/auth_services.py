@@ -37,3 +37,7 @@ def username_exists(username: str) -> bool:
 def user_exists(username: str, password: str) -> bool:
     hashed_password = user_repositories.get_username_password(username)
     return check_password_hash(hashed_password, password)
+
+
+def get_username_by_id(id: int) -> str:
+    return user_repositories.get_username_by_id(id)

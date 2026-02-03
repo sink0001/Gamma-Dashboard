@@ -23,3 +23,12 @@ def get_username_password(username: str) -> str:
         if result:
             return result[0]
         return ""
+    
+
+def get_username_by_id(id: int) -> str:
+    with current_app.pg_connection_pool.connection() as conn: # type:ignore
+        cur = conn.execute("SELECT username FROM users WHERE id = %s", [id])
+        result = cur.fetchone()
+        if result:
+            return result[0]
+        return ""

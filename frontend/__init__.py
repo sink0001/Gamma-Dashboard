@@ -7,6 +7,7 @@ from psycopg_pool import ConnectionPool
 from os import getenv
 from dotenv import find_dotenv, load_dotenv
 from atexit import register
+from flask_login import LoginManager
 
 
 dotenv_path = find_dotenv()
@@ -30,4 +31,12 @@ def create_app():
     register(pg_connection_pool.close)
     app.pg_connection_pool = pg_connection_pool # type:ignore
     
+    from backend.models.User import User
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id: str) -> User:
+        return User.load_user_by_id(int(user_id))
+
     return app
