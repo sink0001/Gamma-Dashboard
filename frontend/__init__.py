@@ -1,7 +1,8 @@
-from flask import Flask, current_app
+from flask import Flask
 from backend.routes.views import views
 from backend.endpoints.heartbeat_listener import heart_beat_listener
 from backend.endpoints.stock_data import stock_data
+from backend.endpoints.user_info import user_info
 from backend.routes.auth import auth
 from psycopg_pool import ConnectionPool
 from os import getenv
@@ -24,8 +25,9 @@ def create_app():
 
     app.register_blueprint(views)
     app.register_blueprint(heart_beat_listener)
-    app.register_blueprint(stock_data, url_prefix="/stock_data/")
-    app.register_blueprint(auth, url_prefix="/auth/")
+    app.register_blueprint(stock_data)
+    app.register_blueprint(auth)
+    app.register_blueprint(user_info)
 
     pg_connection_pool = ConnectionPool(f"host=localhost dbname=gamma_dashboard_db user=postgres port=5432 password={POSTGRES_PASSWORD}", min_size=4, max_size=10)
     register(pg_connection_pool.close)

@@ -4,7 +4,7 @@ from backend.coordinators.User_gate import User_gate
 from backend.models.User import User
 
 
-auth = Blueprint("auth", __name__)
+auth = Blueprint("auth", __name__, url_prefix="/auth/")
 
 
 def check_credential_format(username: str, password: str, turnstile_token_validity: bool) -> bool:
