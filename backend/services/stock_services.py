@@ -14,7 +14,11 @@ TWELVEDATA_API_KEY = os.getenv("TWELVEDATA_API_KEY") # use this to get the stock
 
 async def call_api(url: str, aiohttp_session) -> dict:
     async with aiohttp_session.get(url) as response:
-        json_response = await response.json()
+        try:
+            json_response = await response.json()
+        except Exception as e:
+            print(e.args[0])
+            raise Exception("This ticker isn't supported in the API")
         if response.status == 429:
             raise Exception("We are currently at the API calling limit")
         elif "twelvedata" in url.lower() and json_response.get("code") == 429:
