@@ -39,6 +39,11 @@ def create_app():
 
     @login_manager.user_loader # this is called to check whether a user is logged in by their id and sets the current_user objects is_authenticated value accordingly
     def load_user(user_id: str) -> User | None:
+        '''
+        this callback gets called because when login_user(user) is called the flask session
+        stores _user_id in session and if that is present then at the start of a request
+        this callback is called to load the user object and sets the current_user proxy to that
+        '''
         return User.load_user_by_id(int(user_id))
 
     return app
