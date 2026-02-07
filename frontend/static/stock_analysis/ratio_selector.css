@@ -31,3 +31,33 @@
 .ratio-button:hover {
     color: rgb(68, 192, 233)
 }
+
+
+.stock-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+#stock-name {
+    font-family: sans-serif;
+    margin: 0;
+}
+
+
+#favourite-checkbox {
+    accent-color: #ff5a7a;
+    cursor: pointer;
+    margin-left: 1rem;
+}
+label[for="favourite-checkbox"] {
+    font-family: arial;
+    font-size: 0.8rem;
+    color: #444;
+    cursor: pointer;
+}
+
+label[for="favourite-checkbox"]:hover {
+    color: #000;
+}
