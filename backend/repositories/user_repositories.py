@@ -14,7 +14,7 @@ def username_exists(username: str) -> bool:
         if cur.fetchone():
             return True
         return False
- 
+
 
 def get_username_password(username: str) -> str | None:
     with current_app.pg_connection_pool.connection() as conn: # type:ignore
@@ -23,7 +23,7 @@ def get_username_password(username: str) -> str | None:
         if result:
             return result[0]
         return None
-    
+
 
 def get_username_by_id(id: int) -> str | None:
     with current_app.pg_connection_pool.connection() as conn: # type:ignore
@@ -32,7 +32,7 @@ def get_username_by_id(id: int) -> str | None:
         if result:
             return result[0]
         return None
-    
+
 
 def get_id_by_username(username: str) -> int | None:
     with current_app.pg_connection_pool.connection() as conn: # type:ignore
@@ -41,3 +41,11 @@ def get_id_by_username(username: str) -> int | None:
         if result:
             return result[0]
         return None
+ 
+
+def add_to_user_watchlist(id: int, to_add: str) -> None:
+    with current_app.pg_connection_pool.connection() as conn: # type:ignore
+        conn.execute("""UPDATE users
+                     SET stock_watchlist = array_append(stock_watchlist, %s)
+                     WHERE id = %s""", [to_add, id]
+                     )
