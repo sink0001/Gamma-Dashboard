@@ -37,6 +37,7 @@ def create_app():
     login_manager = LoginManager()
     login_manager.init_app(app)
 
+    login_manager.login_view = "auth.login" # type:ignore
     @login_manager.user_loader # this is called to check whether a user is logged in by their id and sets the current_user objects is_authenticated value accordingly
     def load_user(user_id: str) -> User | None:
         '''
