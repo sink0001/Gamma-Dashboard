@@ -13,3 +13,6 @@ class User(UserMixin):
         if not username:
             return None
         return cls(id, username)
+
+    def add_stock_to_watchlist(self, ticker: str):
+        auth_services.add_to_user_watchlist(self.id, ticker)
