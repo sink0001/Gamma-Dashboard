@@ -18,4 +18,7 @@ class User(UserMixin):
         if user_services.ticker_already_in_user_watchlist(self.id, ticker):
             raise ValueError("This ticker is already in the watchlist")
         return user_services.add_to_user_watchlist(self.id, ticker)
-        
+    
+    @property
+    def watchlist(self) -> list[str]:
+        return user_services.get_watchlist(self.id)

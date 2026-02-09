@@ -11,3 +11,7 @@ def add_to_user_watchlist(user_id: int, ticker: str) -> None:
 
 def ticker_already_in_user_watchlist(user_id: int, ticker: str) -> bool:
     return user_repositories.ticker_already_in_user_watchlist(user_id, ticker)
+
+
+def get_watchlist(user_id: int) -> list[str]:
+    return user_repositories.get_user_watchlist(user_id)
