@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask_login import login_required, current_user
 from backend.models.Stock import Stock
 from backend.coordinators.Cache_handler import Cache_handler
 from aiohttp import ClientSession
@@ -52,3 +53,9 @@ async def analysis_page(stock_name):
             return redirect(url_for("views.home_page"))
         else:
             return redirect(url_for("views.analysis_page", stock_name=ticker))
+        
+
+@views.route("/watchlist")
+@login_required
+def watchlist_page():
+    return render_template("watchlist.html", watchlist=current_user.watchlist)
