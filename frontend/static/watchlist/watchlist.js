@@ -1,31 +1,19 @@
 
 
-const watchlist_toggle = document.querySelector("#favourite-checkbox")
-
-watchlist_toggle.addEventListener("click", async (event) => {
-    event.preventDefault()
-    const toggle = event.target
-    if (toggle.checked) {
-        const response = await fetch("/user_info/add_ticker_to_watchlist")
-        const results = await response.json()
-        console.log(results)
-        if (results["success"]) {
-            toggle.checked = true
-            alert("added the ticker to watchlist")
-        }
-        else if (results["error_type"] === "ValueError") {
-            alert("This stock is already in your watchlist")
-        }
-        else {
-            alert("an error occured while inserting the stock into your watchlist")
-        }
-    }
-})
-
-
 const removers = document.querySelectorAll(".watchlist-remove-button")
 for (const remover of removers) {
-    remover.addEventListener("click", (event) => {
-        // call an endpoint to remove the data-ticker from the watchlist and refresh the page
+    remover.addEventListener("click", async (event) => {
+        const remover_button = event.target
+        const ticker = remover_button.getAttribute("data-ticker")
+
+        await fetch("/user_info/remove_ticker_from_watchlist", {
+            method: "POST",
+            body: JSON.stringify({ticker: ticker}),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        )
+        location.reload()
     })
 }
