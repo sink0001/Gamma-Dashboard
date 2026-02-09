@@ -1,5 +1,5 @@
 from flask_login import UserMixin
-from backend.services import auth_services
+from backend.services import user_services
 
 
 class User(UserMixin):
@@ -9,10 +9,13 @@ class User(UserMixin):
 
     @classmethod
     def load_user_by_id(cls, id: int) -> User | None:
-        username = auth_services.get_username_by_id(id)
+        username = user_services.get_username_by_id(id)
         if not username:
             return None
         return cls(id, username)
 
-    def add_stock_to_watchlist(self, ticker: str):
-        auth_services.add_to_user_watchlist(self.id, ticker)
+    def add_stock_to_watchlist(self, ticker: str) -> None:
+        if user_services.ticker_already_in_user_watchlist(self.id, ticker):
+            raise ValueError("This ticker is already in the watchlist")
+        return user_services.add_to_user_watchlist(self.id, ticker)
+        

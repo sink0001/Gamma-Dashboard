@@ -41,13 +41,5 @@ def user_exists(username: str, password: str) -> bool:
     return check_password_hash(hashed_password, password)
 
 
-def get_username_by_id(id: int) -> str | None:
-    return user_repositories.get_username_by_id(id)
-
-
 def get_id_by_username(username: str) -> int | None:
     return user_repositories.get_id_by_username(username)
-
-
-def add_to_user_watchlist(user_id: int, ticker: str) -> None:
-    return user_repositories.add_to_user_watchlist(user_id, ticker)
