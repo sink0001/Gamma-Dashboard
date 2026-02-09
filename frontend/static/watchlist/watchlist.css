@@ -8,6 +8,12 @@ body {
     list-style-type: none;
 }
 
+.watchlist-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 #watchlist-item {
     display: flex;
     align-items: center;
@@ -27,4 +33,36 @@ body {
 
 a {
     color: rgb(187, 2, 30);
+}
+
+
+.watchlist-remove-button {
+    width: 2rem;
+    height: 2rem;
+
+    position: relative;
+    right: 4rem;
+
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.watchlist-remove-button::before,
+.watchlist-remove-button::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 2px;
+    background: #000;
+}
+
+.watchlist-remove-button::before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.watchlist-remove-button::after {
+    transform: translate(-50%, -50%) rotate(-45deg);
 }

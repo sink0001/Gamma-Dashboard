@@ -2,7 +2,6 @@
 
 const watchlist_toggle = document.querySelector("#favourite-checkbox")
 
-
 watchlist_toggle.addEventListener("click", async (event) => {
     event.preventDefault()
     const toggle = event.target
@@ -22,3 +21,11 @@ watchlist_toggle.addEventListener("click", async (event) => {
         }
     }
 })
+
+
+const removers = document.querySelectorAll(".watchlist-remove-button")
+for (const remover of removers) {
+    remover.addEventListener("click", (event) => {
+        // call an endpoint to remove the data-ticker from the watchlist and refresh the page
+    })
+}
