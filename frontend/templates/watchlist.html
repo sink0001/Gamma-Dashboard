@@ -7,14 +7,17 @@
         <title>watchlist</title>
     </head>
     <body>
-        <ul class="watchlist">
-            {% for ticker in watchlist %}
-            <div class="watchlist-row">
-                <li id="watchlist-item"><a href="/stock-analysis/{{ticker}}">{{ticker}}</a></li>
-                <button data-ticker="{{ticker}}" class="watchlist-remove-button"></button>
-            </div>
-            {% endfor %}
-        </ul>
+        <a href="/" id="home-link">Home</a>
+        <div>
+            <ul class="watchlist">
+                {% for ticker in watchlist %}
+                <div class="watchlist-row">
+                    <li id="watchlist-item"><a href="/stock-analysis/{{ticker}}">{{ticker}}</a></li>
+                    <button data-ticker="{{ticker}}" class="watchlist-remove-button"></button>
+                </div>
+                {% endfor %}
+            </ul>
+        </div>
 
         <script src="{{ url_for('static', filename='watchlist/watchlist.js') }}"></script>
     </body>

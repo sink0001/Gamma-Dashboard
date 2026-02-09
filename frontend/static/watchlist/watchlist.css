@@ -2,6 +2,20 @@ body {
     background-color: #f8f8f8;
 }
 
+
+#home-link {
+    color: #333333;
+    text-decoration: none;
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#home-link:hover {
+    color: lightblue;
+}
+
+
 .watchlist {
     width: fit-content;
     margin: 3rem auto 0 auto;
