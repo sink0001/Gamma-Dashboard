@@ -12,7 +12,7 @@ def add_to_watchlist():
     try:
         data = request.json
         ticker = data["ticker"] # type:ignore
-        current_user.add_stock_to_watchlist(ticker)
+        current_user.add_stock_to_watchlist(ticker) # this raises a ValueError if the ticker is already in the 
         return jsonify(error=None, success=True), 200
     except Exception as e:
-        return jsonify(error=e.args[0], success=False), 400
+        return jsonify(error=e.args[0], error_type=type(e).__name__, success=False), 400
