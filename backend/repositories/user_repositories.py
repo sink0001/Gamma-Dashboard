@@ -55,6 +55,6 @@ def ticker_already_in_user_watchlist(user_id: int, ticker: str) -> bool:
     with current_app.pg_connection_pool.connection() as conn: # type:ignore
         cur = conn.execute("SELECT %s = ANY(stock_watchlist) FROM users WHERE id = %s", [ticker, user_id])
         result = cur.fetchone()
-        if result:
+        if result[0]:
             return True
         return False
