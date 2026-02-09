@@ -65,3 +65,10 @@ def get_user_watchlist(user_id: int) -> list[str]:
         cur = conn.execute("SELECT stock_watchlist FROM users WHERE id = %s", [user_id])
         result = cur.fetchone()
         return result[0]
+    
+
+def remove_from_user_watchlist(user_id: int, to_remove: str) -> None:
+    with current_app.pg_connection_pool.connection() as conn: # type:ignore
+        conn.execute("""UPDATE users
+                     SET stock_watchlist = array_remove(stock_watchlist, %s)
+                     WHERE id = %s""", [to_remove, user_id])
