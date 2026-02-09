@@ -9,7 +9,7 @@ user_info = Blueprint("user_info", __name__, url_prefix="/user_info/")
 @login_required
 def add_to_watchlist():
     try:
-        current_user.add_stock_to_watchlist(session["current_stock_ticker"]) # this raises a ValueError if the ticker is already in the 
+        current_user.add_to_watchlist(session["current_stock_ticker"]) # this raises a ValueError if the ticker is already in the 
         return jsonify(error=None, error_type=None, success=True), 200
     except Exception as e:
         return jsonify(error=e.args[0], error_type=type(e).__name__, success=False), 400
