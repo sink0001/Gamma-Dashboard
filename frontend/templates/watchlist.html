@@ -3,13 +3,13 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial scale=1">
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='watchlist/watchlist.css') }}">
         <title>watchlist</title>
     </head>
     <body>
-        <ul>
+        <ul class="watchlist">
             {% for ticker in watchlist %}
-                <li><a href="/stock-analysis/{{ticker}}">{{ticker}}</a></li>
+                <li id="watchlist-item"><a href="/stock-analysis/{{ticker}}">{{ticker}}</a></li>
             {% endfor %}
         </ul>
     </body>
