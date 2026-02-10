@@ -51,8 +51,9 @@ annual_toggle.addEventListener("click", period_toggle_event_listener)
 quarterly_toggle.addEventListener("click", period_toggle_event_listener)
 
 
-const ad_to_watchlist_toggle = document.querySelector("#favourite-checkbox")
-ad_to_watchlist_toggle.addEventListener("click", async (event) => {
+const add_to_watchlist_toggle = document.querySelector("#favourite-checkbox")
+if (add_to_watchlist_toggle){
+    add_to_watchlist_toggle.addEventListener("click", async (event) => {
     event.preventDefault()
     const toggle = event.target
     if (toggle.checked) {
@@ -71,3 +72,4 @@ ad_to_watchlist_toggle.addEventListener("click", async (event) => {
         }
     }
 })
+}
