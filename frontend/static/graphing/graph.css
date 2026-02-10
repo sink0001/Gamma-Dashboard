@@ -27,3 +27,27 @@
     margin-right: 5vw;
     margin-left: 5vw;
 }
+
+
+@media (max-width: 500px) {
+    .graph-area {
+        order: 1;
+        width: 100%;
+    }
+
+    #chart {
+        width: 100%;
+        height: 40vh;
+        margin: 0;
+    }
+
+    .period-toggle {
+        gap: 0.5rem;
+    }
+
+    .period-button {
+        font-size: 0.75rem;
+        padding: 0.4em 0.6em;
+        margin: 0.5rem 0;
+    }
+}

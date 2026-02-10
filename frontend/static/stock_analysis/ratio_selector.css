@@ -27,6 +27,9 @@
     padding: 0.5em 1em;
     font-weight: bold;
     color: #9b9b9b;
+    min-width: 10rem;
+    width: 100%;
+    text-align: center;
 }
 .ratio-button:hover {
     color: rgb(68, 192, 233)
@@ -60,4 +63,45 @@ label[for="favourite-checkbox"] {
 
 label[for="favourite-checkbox"]:hover {
     color: #000;
+}
+
+
+/* mobile styles */
+@media (max-width: 500px) {
+
+    .ratio-content {
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+
+    .ratio-selector {
+        order: 2;
+        margin: 1rem 0 0 0;
+        padding: 0.5rem;
+        gap: 0.4rem;
+    }
+
+    .column {
+        padding: 0;
+        gap: 0.4rem;
+    }
+
+    .ratio-button {
+        width: 100%;
+        min-width: 5rem;
+        font-size: 0.4rem;
+        padding: 0.3em 0.2em;
+        margin: 0;
+        border-radius: 4px;
+        white-space: nowrap;
+    }
+
+    .stock-header {
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    #stock-name {
+        font-size: 1.3rem;
+    }
 }

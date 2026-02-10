@@ -59,7 +59,7 @@ body {
 }
 
 
-/* === mobile styles === */
+/* mobile styles */
 @media (max-width: 500px) {
     .welcome-user {
         position: relative;
@@ -81,7 +81,7 @@ body {
 }
 
 
-/* === tables styles === */
+/* tables styles */
 @media (max-width: 992px) {
     .welcome-user {
         right: 8px;
