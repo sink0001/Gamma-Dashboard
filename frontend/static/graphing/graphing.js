@@ -20,6 +20,7 @@ export async function graph_ratio(ratio, ratio_display_name, period, chart) {
     const positional_values = await get_graph_values(ratio, period)
     const x_values = positional_values[0]
     const y_values = positional_values[1]
+    const mobile = window.matchMedia('(max-width: 500px)').matches
 
     const graph = new Chart(chart, {
             type: 'line', // Type of chart
@@ -36,7 +37,7 @@ export async function graph_ratio(ratio, ratio_display_name, period, chart) {
                 }]
             },
             options: {
-                responsive: true,
+                responsive: !mobile,
                 plugins: {
                     legend: {
                         display: false

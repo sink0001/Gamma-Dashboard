@@ -29,16 +29,49 @@
 }
 
 
+/* mobile styles */
 @media (max-width: 500px) {
     .graph-area {
         order: 1;
         width: 100%;
     }
 
-    #chart {
+    .graph-container {
         width: 100%;
-        height: 40vh;
+        height: auto;
         margin: 0;
+    }
+
+    #chart {
+        width: 100vw;
+        height: 45vh;
+        margin: 0;
+        display: block;
+    }
+
+    .period-toggle {
+        gap: 0.5rem;
+    }
+
+    .period-button {
+        font-size: 0.75rem;
+        padding: 0.4em 0.6em;
+        margin: 0.5rem 0;
+    }
+}
+
+
+/* tables styles */
+@media (max-width: 1024px) {
+    .graph-area {
+        order: 1;
+        width: 100%;
+    }
+
+    #chart {
+        width: 45vw;
+        height: 45vh;
+        margin: 0 auto;
     }
 
     .period-toggle {
