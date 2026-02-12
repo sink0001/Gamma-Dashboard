@@ -83,7 +83,7 @@ body {
 
 
 /* tables styles */
-@media (min-width: 500px) and (max-width: 1680px) {
+@media (min-width: 501px) and (max-width: 1680px) {
     .welcome-user {
         right: 8px;
         top: 8px;

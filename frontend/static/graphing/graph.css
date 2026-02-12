@@ -62,7 +62,7 @@
 
 
 /* tables styles */
-@media (min-width: 500px) and (max-width: 1680px) {
+@media (min-width: 501px) and (max-width: 1680px) {
     .graph-area {
         order: 1;
         width: 100%;
@@ -87,7 +87,7 @@
 
 
 /* larger desktop screens */
-@media (min-width: 1680px) and (max-width: 2048px) {
+@media (min-width: 1681px) and (max-width: 2048px) {
     .graph-container {
         margin: 5em 0 0 5em;
     }

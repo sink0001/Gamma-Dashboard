@@ -113,7 +113,7 @@ label[for="favourite-checkbox"]:hover {
 
 
 /* tablet styles */
-@media (min-width: 500px) and (max-width: 1680px) {
+@media (min-width: 501px) and (max-width: 1680px) {
     .ratio-content {
         flex-direction: column;
         margin-top: 1.5rem;
@@ -155,7 +155,7 @@ label[for="favourite-checkbox"]:hover {
 
 
 /* larger desktop screens */
-@media (min-width: 1680px) and (max-width: 2048px) {
+@media (min-width: 1681px) and (max-width: 2048px) {
     .ratio-content {
         width: 100%;
     }
