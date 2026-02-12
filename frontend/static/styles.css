@@ -63,7 +63,7 @@ body {
 @media (max-width: 500px) {
     .welcome-user {
         position: relative;
-        top: 75vh;
+        top: 2vh;
         right: 0;
         text-align: center;
         margin-bottom: 1rem;
@@ -83,7 +83,7 @@ body {
 
 
 /* tables styles */
-@media (max-width: 992px) {
+@media (min-width: 500px) and (max-width: 1680px) {
     .welcome-user {
         right: 8px;
         top: 8px;

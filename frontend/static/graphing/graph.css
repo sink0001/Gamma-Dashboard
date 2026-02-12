@@ -30,7 +30,7 @@
 
 
 /* mobile styles */
-@media (max-width: 500px) {
+@media (min-width: 0px) and (max-width: 500px) {
     .graph-area {
         order: 1;
         width: 100%;
@@ -62,7 +62,7 @@
 
 
 /* tables styles */
-@media (max-width: 1024px) {
+@media (min-width: 500px) and (max-width: 1680px) {
     .graph-area {
         order: 1;
         width: 100%;
@@ -82,5 +82,13 @@
         font-size: 0.75rem;
         padding: 0.4em 0.6em;
         margin: 0.5rem 0;
+    }
+}
+
+
+/* larger desktop screens */
+@media (min-width: 1680px) and (max-width: 2048px) {
+    .graph-container {
+        margin: 5em 0 0 5em;
     }
 }
