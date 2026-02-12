@@ -68,3 +68,18 @@ h1 {
 .auth-submit:hover {
     background-color: #469fff;
 }
+
+
+/* mobile styles */
+@media (max-width: 500px), (max-height: 600px) {
+    .auth-form {
+        margin-top: 5vh;
+        height: 448px;
+        width: 320px;
+        gap: 1.5rem;
+    }
+    
+    .auth-form-input-field {
+        width: 300px;
+    }
+}
