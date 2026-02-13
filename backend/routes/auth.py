@@ -71,6 +71,8 @@ def login():
                     user = User(user_id, username) # type:ignore
                     login_user(user)
                 return redirect(url_for("views.home_page"))
+            else:
+                flash("username or password is wrong")
         return redirect(url_for("auth.login"))
     
 
