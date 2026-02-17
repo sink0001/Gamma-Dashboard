@@ -15,7 +15,7 @@
     - I'm using Redis to cache API responses because I get rate limited quickly on the free tier and calling the API everytime a new graph is requested is slow
 - Frontend
     - I'm using chart.js for graphs but other than that just vanilla html, css and javascript
-
+---
 ## My caching model
 - I'm using server side caching where the keys are the session id that is assigned to the session cookie in the users browser when they start a new session on my site (this way I'm caching by session aswell so no sign-in required to use core functionality)
 - When a user enters a stocks ticker (e.g. AAPL) I call both APIs to get all the financial statements and stuff that i need and I cache them under the users session id key
