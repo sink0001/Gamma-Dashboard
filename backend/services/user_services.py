@@ -14,7 +14,8 @@ def ticker_already_in_user_watchlist(user_id: int, ticker: str) -> bool:
 
 
 def get_watchlist(user_id: int) -> list[str]:
-    return user_repositories.get_user_watchlist(user_id)
+    watchlist = user_repositories.get_user_watchlist(user_id)
+    return watchlist if watchlist else []
 
 
 def remove_from_user_watchlist(user_id: int, ticker: str) -> None:
